@@ -3,5 +3,7 @@
   {
     MyPackage_Core.m
     MyNewFunction.m
+    MixZpInnerProduct.m
+    SelfDualZp.m
   }
 }
