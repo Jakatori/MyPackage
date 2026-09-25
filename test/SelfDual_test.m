@@ -23,3 +23,17 @@ lengthSeq := [0, 2];
 // Create two vectors over R of length 2
 u := Vector(R, [1, 2]);
 v := Vector(R, [2, 0]);
+
+// Compute and print the mixed inner product
+ip := MixZpInnerProduct(u, v, lengthSeq);
+print "Mixed Inner Product:", ip;
+
+// Create a code instance and test self-orthogonality/duality
+G := Matrix(R, 1, 2, [2, 0]);
+C := LinearCode(G);
+
+isOrthogonal := IsSelfOrthogonalZp(C, lengthSeq);
+print "Is self-orthogonal?", isOrthogonal;
+
+isDual := IsSelfDualZp(C, lengthSeq);
+print "Is self-dual?", isDual;
