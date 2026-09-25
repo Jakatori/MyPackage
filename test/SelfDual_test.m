@@ -13,3 +13,13 @@ assert IsSelfOrthogonalZp(C, lengthSeq) eq true;
 assert IsSelfDualZp(C, lengthSeq) eq true;
 
 print "SelfDual tests passed!";
+
+// Define the base ring Z_4
+R := Integers(4);
+
+// Define a block length sequence, e.g., alpha_1 = 0, alpha_2 = 2 (total length 2)
+lengthSeq := [0, 2];
+
+// Create two vectors over R of length 2
+u := Vector(R, [1, 2]);
+v := Vector(R, [2, 0]);
