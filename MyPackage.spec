@@ -2,6 +2,7 @@
   src
   {
     ZpAdditiveCodes_Core.m
+    ZpAdditiveCodes_Constructions.m
     MixZpAdditiveCodes_Core.m
     MixZpInnerProduct.m
     SelfDualZp.m
