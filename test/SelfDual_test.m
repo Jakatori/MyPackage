@@ -37,3 +37,10 @@ print "Is self-orthogonal?", isOrthogonal;
 
 isDual := IsSelfDualZp(C, lengthSeq);
 print "Is self-dual?", isDual;
+
+// Testing over Z_8 (p = 2, s = 3)
+R8 := Integers(8);
+lengthSeq8 := [1, 1, 1]; // e.g., alpha_1 = 1, alpha_2 = 1, alpha_3 = 1
+
+// Verify exponent sum condition: sum(i * alpha_i) should be even for self-dual codes
+// 1(1) + 2(1) + 3(1) = 6 (which is even!)

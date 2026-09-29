@@ -1,4 +1,3 @@
-// practice/practice_codes.m
 AttachSpec("MyPackage.spec");
 
 print "Setting up Z4 rings and vector space...";

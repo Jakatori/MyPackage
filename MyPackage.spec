@@ -3,7 +3,9 @@
   {
     MyPackage_Core.m
     MyNewFunction.m
+    LinearBinaryCode.m
     MixZpInnerProduct.m
     SelfDualZp.m
+    MixZpAdditiveCodes_Core.m
   }
 }
