@@ -1,11 +1,11 @@
 {
   src
   {
-    MyPackage_Core.m
-    MyNewFunction.m
-    LinearBinaryCode.m
+    ZpAdditiveCodes_Core.m
+    MixZpAdditiveCodes_Core.m
     MixZpInnerProduct.m
     SelfDualZp.m
-    MixZpAdditiveCodes_Core.m
-  }
+    LinearBinaryCode.m
+    MyPackage_Core.m
+    MyNewFunction.m
 }

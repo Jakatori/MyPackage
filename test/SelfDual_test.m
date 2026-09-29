@@ -9,8 +9,11 @@ lengthSeq := [0, 2]; // alpha_1=0, alpha_2=2 (length 2 over Z_4)
 G := Matrix(R, [[2, 0], [0, 2]]);
 C := LinearCode(G);
 
-assert IsSelfOrthogonalZp(C, lengthSeq) eq true;
-assert IsSelfDualZp(C, lengthSeq) eq true;
+// Wrap the linear code into a MixZpCode (p = 2, s = 2)
+C_mix := MixZpAdditiveCode(C, 2, lengthSeq);
+
+assert IsSelfOrthogonalZp(C_mix) eq true;
+assert IsSelfDualZp(C_mix) eq true;
 
 print "SelfDual tests passed!";
 
@@ -29,13 +32,16 @@ ip := MixZpInnerProduct(u, v, lengthSeq);
 print "Mixed Inner Product:", ip;
 
 // Create a code instance and test self-orthogonality/duality
-G := Matrix(R, 1, 2, [2, 0]);
-C := LinearCode(G);
+G2 := Matrix(R, 1, 2, [2, 0]);
+C2 := LinearCode(G2);
 
-isOrthogonal := IsSelfOrthogonalZp(C, lengthSeq);
+// Wrap this code instance into a MixZpCode as well
+C2_mix := MixZpAdditiveCode(C2, 2, lengthSeq);
+
+isOrthogonal := IsSelfOrthogonalZp(C2_mix);
 print "Is self-orthogonal?", isOrthogonal;
 
-isDual := IsSelfDualZp(C, lengthSeq);
+isDual := IsSelfDualZp(C2_mix);
 print "Is self-dual?", isDual;
 
 // Testing over Z_8 (p = 2, s = 3)
