@@ -1,5 +1,7 @@
 
 
+
+
 intrinsic MixZpInnerProduct(u::ModTupRngElt, v::ModTupRngElt, lengthSeq::SeqEnum[RngIntElt]) -> RngIntElt
     {Computes the mixed Z_p^s inner product for u and v given block lengths lengthSeq = [alpha_1, ..., alpha_s].}
     
