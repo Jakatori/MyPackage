@@ -49,20 +49,19 @@ print "Test 3 passed: self-orthogonal but not self-dual.";
 
 print "SelfDual tests passed!";
 
-
+// ====================================================================
+// Randomized Stress-Testing
+// ====================================================================
 print "Running randomized tests for mixed Zp-additive codes...";
 
 p := 2;
-F := GF(p);
 lengthSeq := [4, 4];
-n := &+lengthSeq;
-k := n div 2;
 
-for i := [1..10] do
-    C_linear := RandomLinearCode(F, n, k);
-    C_mix := MixZpAdditiveCode(C_linear, p, lengthSeq);
+for i in [1..10] do
+    // Generate a valid random mixed Zp-additive code directly
+    C_mix := RandomMixZpAdditiveCode(p, lengthSeq);
     
-    // Test properties dynamically
+    // Verify execution stability on random codes
     _ := IsSelfOrthogonal(C_mix);
     _ := IsSelfDual(C_mix);
 end for;
