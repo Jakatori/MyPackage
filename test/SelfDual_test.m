@@ -30,8 +30,9 @@ ip := MixZpInnerProduct(u, v, lengthSeq);
 
 print "Mixed Inner Product:", ip;
 
+// Example fix for Test 2
+ip := MixZpInnerProduct(u, v, lengthSeq);
 assert ip eq R!2;
-
 print "Test 2 passed: mixed inner product.";
 
 
@@ -67,3 +68,38 @@ for i in [1..10] do
 end for;
 
 print "Randomized tests passed successfully!";
+
+
+// ====================================================================
+// Additional Examples & Package Feature Verification
+// ====================================================================
+print "Running additional mixed Zp-additive code examples...";
+
+p := 2;
+lengthSeq := [4, 4];
+
+// 1. Generate a random mixed code and inspect basic properties
+C := RandomMixZpAdditiveCode(p, lengthSeq);
+print "Code successfully generated!";
+print "Total length (sum of lengthSeq):", MixZpLength(C);
+print "Equivalent linear length over Zp:", MixZpLengthOverZp(C);
+print "Code type (number of generators per level):", MixZpType(C);
+print "Size of the code (#C):", #C;
+print "Information rate:", InformationRate(C);
+
+// 2. Test inner product between random elements from the code
+u := Random(C);
+v := Random(C);
+mixed_prod := MixZpInnerProduct(u, v, lengthSeq);
+print "Mixed Inner Product of two random elements:", mixed_prod;
+
+// 3. Test Carlet Gray Map and its image structure
+if HasLinearCarletGrayMapImage(C) then
+    print "Carlet Gray map image is linear!";
+    gray_img := CarletGrayMapImage(C);
+    print "Number of vectors in Gray map image:", #gray_img;
+else
+    print "Carlet Gray map image is non-linear.";
+end if;
+
+print "Additional examples completed successfully!";
