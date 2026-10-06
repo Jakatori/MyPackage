@@ -29,3 +29,42 @@ if not found_self_dual then
 end if;
 
 print "Z2Z4Z8 tests completed successfully!";
+
+// ====================================================================
+// Z2Z4Z8-Additive Codes: Advanced Examples & Practice
+// ====================================================================
+print "Running Z2Z4Z8-additive code practice examples...";
+
+p := 2;
+// lengthSeq for Z2, Z4, and Z8 components respectively
+lengthSeq := [2, 4, 2]; // Total length = 8
+print "Configured lengthSeq for Z2Z4Z8:", lengthSeq;
+
+// 1. Generate a random Z2Z4Z8-additive code
+C := RandomMixZpAdditiveCode(p, lengthSeq);
+print "Successfully generated Z2Z4Z8-additive code!";
+
+// 2. Inspect structural metrics
+print "Total length:", MixZpLength(C);
+print "Equivalent linear length over Zp:", MixZpLengthOverZp(C);
+print "Code type (generators per level):", MixZpType(C);
+print "Total number of codewords (#C):", #C;
+print "Information rate:", InformationRate(C);
+
+// 3. Test element-level inner products
+if #C ge 2 then
+    u := Random(C);
+    v := Random(C);
+    ip := MixZpInnerProduct(u, v, lengthSeq);
+    print "Sample inner product between two codewords:", ip;
+end if;
+
+// 4. Test Carlet Gray map image properties for Z2Z4Z8 codes
+has_linear := HasLinearCarletGrayMapImage(C);
+if has_linear then
+    print "Carlet Gray map image is LINEAR!";
+else
+    print "Carlet Gray map image is non-linear.";
+end if;
+
+print "Z2Z4Z8 practice examples completed successfully!\n";
