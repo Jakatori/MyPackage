@@ -27,12 +27,3 @@ intrinsic MixZpInnerProduct(u::ModTupRngElt, v::ModTupRngElt, lengthSeq::SeqEnum
     return sum;
 end intrinsic;
 
-intrinsic MixZpInnerProduct(u, v, lengthSeq) -> RngElt
-{
-    "Computes the mixed inner product between vectors u and v.";
-    R := Parent(u[1]);
-    // Implement your inner product summation/scaling logic here based on lengthSeq
-    sum := R!0;
-    // ... computation ...
-    return sum;
-}

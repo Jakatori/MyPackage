@@ -2118,3 +2118,12 @@ Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_s] are multiplied by p^(s-1) for i in
     return Random(C`Code);
 
 end intrinsic;
+
+
+intrinsic MixZpAdditiveCode(C, p, lengthSeq) -> Code
+{
+    "Constructs a mixed Zp-additive code from a linear code and length sequence.";
+    // Add your construction and formatting logic here
+    // For example, returning the code object used in your package structure:
+    return C; 
+}
