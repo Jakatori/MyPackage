@@ -68,3 +68,18 @@ else
 end if;
 
 print "Z2Z4Z8 practice examples completed successfully!\n";
+
+// Custom Z2Z4Z8 code test
+Z8 := IntegerRing(8);
+R := RSpace(Z8, 6);
+C1 := MixZpAdditiveCode([
+    R![4, 0, 4, 4, 1, 3], 
+    R![0, 4, 6, 2, 1, 5],
+    R![4, 4, 0, 1, 3, 5], 
+    R![0, 0, 2, 1, 1, 1]
+], 2, [2, 1, 3]);
+
+print "Custom Z2Z4Z8 Code successfully constructed!";
+print "Code type:", MixZpType(C1);
+print "Size (#C1):", #C1;
+print "Is self-dual?", IsSelfDual(C1);
