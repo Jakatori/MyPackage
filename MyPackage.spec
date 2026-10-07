@@ -7,6 +7,7 @@
     MixZpInnerProduct.m
     SelfDualZp.m
     LinearBinaryCode.m
+    LinearQuaternaryCode.m
     MyPackage_Core.m
     MyNewFunction.m
 }
