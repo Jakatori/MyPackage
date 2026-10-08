@@ -61,7 +61,7 @@ lengthSeq := [4, 4];
 for i in [1..10] do
     // Generate a valid random mixed Zp-additive code directly
     C_mix := RandomMixZpAdditiveCode(p, lengthSeq);
-    
+
     // Verify execution stability on random codes
     _ := IsSelfOrthogonal(C_mix);
     _ := IsSelfDual(C_mix);

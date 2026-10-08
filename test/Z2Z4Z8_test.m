@@ -11,10 +11,10 @@ lengthSeq := [2, 2, 4]; // Total length = 8
 found_self_dual := false;
 for i in [1..20] do
     C := RandomMixZpAdditiveCode(p, lengthSeq);
-    
+
     is_orthog := IsSelfOrthogonal(C);
     is_dual := IsSelfDual(C);
-    
+
     if is_dual then
         found_self_dual := true;
         print "Found a self-dual Z2Z4Z8-additive code on attempt", i;
@@ -73,9 +73,9 @@ print "Z2Z4Z8 practice examples completed successfully!\n";
 Z8 := IntegerRing(8);
 R := RSpace(Z8, 6);
 C1 := MixZpAdditiveCode([
-    R![4, 0, 4, 4, 1, 3], 
+    R![4, 0, 4, 4, 1, 3],
     R![0, 4, 6, 2, 1, 5],
-    R![4, 4, 0, 1, 3, 5], 
+    R![4, 4, 0, 1, 3, 5],
     R![0, 0, 2, 1, 1, 1]
 ], 2, [2, 1, 3]);
 

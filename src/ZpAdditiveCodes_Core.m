@@ -2095,4 +2095,3 @@ Gray map. Note that this function is only applicable when S and C are small.
     return leadersZps, leadersGFp;
 
 end intrinsic;
-
