@@ -49,25 +49,25 @@ intrinsic MixZpAdditiveCodes_Core_version() -> SeqEnum
 
 end intrinsic;
 
-//////  Functions we need from the ZpsAdditiveCode package 
+//////  Functions we need from the ZpsAdditiveCode package
 
 import "ZpAdditiveCodes_Core.m": IsLinearCodeOverZps,
                                  IsMatrixOverZps;
 
 //////  Type declaration
-	
+
 declare type MixZpCode;
 
 declare attributes MixZpCode:
     LengthSeq,            //a sequence with the length of each part over Z/p^i
     BaseRing,             //the base ring Zp, p prime
     Code,                 //the corresponding code over Z/p^s
-    Type,                 //a sequence with the values t1,..,ts of the code 
+    Type,                 //a sequence with the values t1,..,ts of the code
     ExtendType,           //an s x s matrix with the extend type K of the code
     MinimumHomWeight,     //minimum homogeneous weight of the code
     MinimumHomWeightLowerBound,    //minimum homogeneous weight lower bound
     MinimumHomWeightUpperBound,    //minimum homogeneous weight upper bound
-    MinimumHomWeightWord,   //a codeword of minimum homogeneous weight 
+    MinimumHomWeightWord,   //a codeword of minimum homogeneous weight
     HomWeightDistribution;  //the homogeneous weight distribution
 
 /******************************************************************************
@@ -86,7 +86,7 @@ over_Z4 := func<C | Alphabet(C) cmpeq Integers(4)>;
 		        Conversion functions from/to Z/p^s to/from Zp
 ******************************************************************************/
 
-// M is a matrix over Z/p^s, where the first coordinates are multiplied by 
+// M is a matrix over Z/p^s, where the first coordinates are multiplied by
 // powers of p.
 procedure MixZpChangeMatrixZptoZps(~M, p, lengthSeq);
     lowerInterval := 1;
@@ -100,7 +100,7 @@ procedure MixZpChangeMatrixZptoZps(~M, p, lengthSeq);
     end for;
 end procedure;
 
-// M is a matrix over Z/ps, where the coordinates which are multiples of 
+// M is a matrix over Z/ps, where the coordinates which are multiples of
 // powers of p, are divided by these powers of p.
 procedure MixZpChangeMatrixZpstoZp(~M, p, lengthSeq);
     lowerInterval := 1;
@@ -197,18 +197,18 @@ end function;
 /*****************************************************************************/
 intrinsic FromZpstoMixZp(u::ModTupRngElt, lengthSeq::[RngIntElt]) -> Tup
 {
-Given a vector u over Z/p^s of length a_1+...+a_s and a sequence of non-negative 
-integers lengthSeq = [a_1,...,a_s], return the conversion of this vector to a tuple 
-in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x .. x (Zp^s)^a_s, replacing the 
-elements jp^(s-i) over Z/p^s in the coordinates in X_i to j over Z/p^i for i in 
-[1,..,s]. It is checked whether the elements in the coordinates in X_i belong to 
+Given a vector u over Z/p^s of length a_1+...+a_s and a sequence of non-negative
+integers lengthSeq = [a_1,...,a_s], return the conversion of this vector to a tuple
+in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x .. x (Zp^s)^a_s, replacing the
+elements jp^(s-i) over Z/p^s in the coordinates in X_i to j over Z/p^i for i in
+[1,..,s]. It is checked whether the elements in the coordinates in X_i belong to
 the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i) ].
 }
     require Min(lengthSeq) ge 0: "Argument 2 must be a sequence of non-negative integers";
     n := OverDimension(u);
     require &+lengthSeq eq n: "Argument 2 is not compatible with the length of the vector";
     M := Matrix(u);
-    isOverZps, p, s := IsMatrixOverZps(M); 
+    isOverZps, p, s := IsMatrixOverZps(M);
     require isOverZps and (s ge 2): "The vector must be over Z/p^s with s>0";
     require IsMixZpAdditiveOverZps(M, p, lengthSeq):
             "Coordinates must be multiples of powers of p according to argument 3";
@@ -243,11 +243,11 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic FromZpstoMixZp(L::SeqEnum[ModTupRngElt], lengthSeq::[RngIntElt]) -> SeqEnum
 {
-Given a sequence L of vectors over Z/p^s of length a_1+...+a_s and a sequence of 
-non-negative integers lengthSeq = [a_1,...,a_s], return the conversion of these 
-vectors to a sequence of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2 
-x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates 
-in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in 
+Given a sequence L of vectors over Z/p^s of length a_1+...+a_s and a sequence of
+non-negative integers lengthSeq = [a_1,...,a_s], return the conversion of these
+vectors to a sequence of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2
+x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates
+in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in
 the coordinates in X_i belong to the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i) ].
 }
     require not(IsEmpty(L)): "Argument 1 cannot be empty";
@@ -257,7 +257,7 @@ the coordinates in X_i belong to the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i
     n := OverDimension(L[1]);
     require &+lengthSeq eq n: "Argument 2 is not compatible with the length of the vectors";
     M := Matrix(L);
-    isOverZps, p, s := IsMatrixOverZps(M); 
+    isOverZps, p, s := IsMatrixOverZps(M);
     require isOverZps and (s ge 2): "The vectors must be over Z/p^s with s>0";
     require IsMixZpAdditiveOverZps(M, p, lengthSeq):
             "Coordinates must be multiples of powers of p according to argument 3";
@@ -292,11 +292,11 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic FromZpstoMixZp(S::SetEnum[ModTupRngElt], lengthSeq::[RngIntElt]) -> SetEnum
 {
-Given a set S of vectors over Z/p^s of length a_1+...+a_s and a sequence of 
-non-negative integers lengthSeq = [a_1,...,a_s], return the conversion of these 
-vectors to a set of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2 
-x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates 
-in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in 
+Given a set S of vectors over Z/p^s of length a_1+...+a_s and a sequence of
+non-negative integers lengthSeq = [a_1,...,a_s], return the conversion of these
+vectors to a set of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2
+x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates
+in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in
 the coordinates in X_i belong to the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i) ].
 }
     require not(IsEmpty(S)): "Argument 1 cannot be empty";
@@ -307,7 +307,7 @@ the coordinates in X_i belong to the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i
     n := OverDimension(S[1]);
     require &+lengthSeq eq n: "Argument 2 is not compatible with the length of the vectors";
     M := Matrix(S);
-    isOverZps, p, s := IsMatrixOverZps(M); 
+    isOverZps, p, s := IsMatrixOverZps(M);
     require isOverZps and (s ge 2): "The vectors must be over Z/p^s with s>0";
     require IsMixZpAdditiveOverZps(M, p, lengthSeq):
             "Coordinates must be multiples of powers of p according to argument 3";
@@ -342,18 +342,18 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic FromZpstoMixZp(M::ModMatRngElt, lengthSeq::[RngIntElt]) -> SeqEnum
 {
-Given a matrix M over Z/p^s with a_1+...+a_s columns and a sequence of non-negative 
-integers lengthSeq = [a_1,...,a_s], return the conversion of the sequence with the 
-rows of M to a sequence of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2 
-x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates 
-in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in 
+Given a matrix M over Z/p^s with a_1+...+a_s columns and a sequence of non-negative
+integers lengthSeq = [a_1,...,a_s], return the conversion of the sequence with the
+rows of M to a sequence of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2
+x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates
+in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in
 the coordinates in X_i belong to the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i) ].
 }
     n := Ncols(M);
     require (n gt 0): "Argument 1 cannot be a matrix with 0 columns";
     require Min(lengthSeq) ge 0: "Argument 2 must be a sequence of non-negative integers";
     require &+lengthSeq eq n: "Argument 2 is not compatible with the length of the vectors";
-    isOverZps, p, s := IsMatrixOverZps(M); 
+    isOverZps, p, s := IsMatrixOverZps(M);
     require isOverZps and (s ge 2): "The vectors must be over Z/p^s with s>0";
     require IsMixZpAdditiveOverZps(M, p, lengthSeq):
             "Coordinates must be multiples of powers of p according to argument 3";
@@ -388,18 +388,18 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic FromZpstoMixZp(M::AlgMatElt, lengthSeq::[RngIntElt]) -> SeqEnum
 {
-Given a matrix M over Z/p^s with a_1+...+a_s columns and a sequence of non-negative 
-integers lengthSeq = [a_1,...,a_s], return the conversion of the sequence with the 
-rows of M to a sequence of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2 
-x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates 
-in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in 
+Given a matrix M over Z/p^s with a_1+...+a_s columns and a sequence of non-negative
+integers lengthSeq = [a_1,...,a_s], return the conversion of the sequence with the
+rows of M to a sequence of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2
+x .. x (Zp^s)^a_s, replacing the elements jp^(s-i) over Z/p^s in the coordinates
+in X_i to j over Z/p^i for i in [1,..,s]. It is checked whether the elements in
 the coordinates in X_i belong to the set [ 0, p^(s-i), 2p^(s-i),..,(p^i-1)p^(s-i) ].
 }
     n := Ncols(M);
     require (n gt 0): "Argument 1 cannot be a matrix with 0 columns";
     require Min(lengthSeq) ge 0: "Argument 2 must be a sequence of non-negative integers";
     require &+lengthSeq eq n: "Argument 2 is not compatible with the length of the vectors";
-    isOverZps, p, s := IsMatrixOverZps(M); 
+    isOverZps, p, s := IsMatrixOverZps(M);
     require isOverZps and (s ge 2): "The vectors must be over Z/p^s with s>0";
     require IsMixZpAdditiveOverZps(M, p, lengthSeq):
             "Coordinates must be multiples of powers of p according to argument 3";
@@ -432,20 +432,20 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic FromMixZptoZps(u::Tup, p::RngIntElt) -> ModTupRngElt
 {
-Given a tuple u in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x...x (Zp^s)^a_s 
-and a prime number p, return the conversion of the tuple u to a vector over 
-Z/p^s of length a_1+...+a_s with its a_i coordinates in positions 
+Given a tuple u in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x...x (Zp^s)^a_s
+and a prime number p, return the conversion of the tuple u to a vector over
+Z/p^s of length a_1+...+a_s with its a_i coordinates in positions
 X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] multiplied by p^(s-i) for i in [1,..,s].
 }
     s := #u;
     for i in [1..s] do
-        require Type(u[i]) cmpeq ModTupRngElt: 
+        require Type(u[i]) cmpeq ModTupRngElt:
             "Argument 1 must be a tuple containing vectors over a ring";
-        require BaseRing(u[i]) cmpeq Integers(p^i): 
+        require BaseRing(u[i]) cmpeq Integers(p^i):
             "The i-th component vector in the tuple must be over the ring Z/p^i";
     end for;
     require IsPrime(p): "Argument 2 must be a prime number";
-    
+
     Zps := Integers(p^s);
     return HorizontalJoin(<ChangeRing(u[i], Zps) * p^(s - i) : i in [1..s]>)[1];
 
@@ -476,27 +476,27 @@ end intrinsic;
 intrinsic FromMixZptoZps(L::SeqEnum[Tup], p::RngIntElt) -> SeqEnum
 {
 Given a sequence L of tuples in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x
-...x (Zp^s)^a_s and a prime number p, return the conversion of theses tuples to 
-a sequence of vectors over Z/p^s of length a_1+...+a_s with their a_i coordinates 
-in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] multiplied by p^(s-i) 
+...x (Zp^s)^a_s and a prime number p, return the conversion of theses tuples to
+a sequence of vectors over Z/p^s of length a_1+...+a_s with their a_i coordinates
+in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] multiplied by p^(s-i)
 for i in [1,..,s].
 }
     u := L[1]; // the first tuple in L
     s := #u;
     for i in [1..s] do
-        require Type(u[i]) cmpeq ModTupRngElt: 
+        require Type(u[i]) cmpeq ModTupRngElt:
             "Argument 1 must be a sequence of tuples containing vectors over a ring";
-        require BaseRing(u[i]) cmpeq Integers(p^i): 
+        require BaseRing(u[i]) cmpeq Integers(p^i):
             "The i-th component vector in each tuple must be over the ring Z/p^i";
     end for;
     require IsPrime(p): "Argument 2 must be a prime number";
-    
+
     Zps := Integers(p^s);
     newL := [];
     for u in L do
         Append(~newL, HorizontalJoin(<ChangeRing(u[i], Zps) * p^(s-i) : i in [1..s]>)[1]);
     end for;
-    
+
     return newL;
 
 end intrinsic;
@@ -524,52 +524,52 @@ end intrinsic;
 intrinsic Print(C::MixZpCode, L::MonStgElt)
 {
 Print the ZpZp^2..Zp^s-additive code C information at level L.
-}    
+}
     cardinalCode := #C;
     typeC := Reverse(ZpType(C`Code));
     lengthC := Length(C`Code);
-    
+
     case L:
         when "Default" :
-            //N, M, d Z2Z4Code 
+            //N, M, d Z2Z4Code
             if assigned C`MinimumHomWeight then
-                printf "(%o, %o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n", 
-                        lengthC, cardinalCode, C`MinimumHomWeight, C`LengthSeq, typeC;                
+                printf "(%o, %o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n",
+                        lengthC, cardinalCode, C`MinimumHomWeight, C`LengthSeq, typeC;
             else
                 printf "(%o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n",
                         lengthC, cardinalCode, C`LengthSeq, typeC;
             end if;
             printf "Generator matrix:\n%o", GeneratorMatrix(C`Code);
         when "Minimal" :
-            //N, M, d MixZpCode 
+            //N, M, d MixZpCode
             if assigned C`MinimumHomWeight then
-                printf "(%o, %o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o", 
-                        lengthC, cardinalCode, C`MinimumHomWeight, C`LengthSeq, typeC;              
+                printf "(%o, %o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o",
+                        lengthC, cardinalCode, C`MinimumHomWeight, C`LengthSeq, typeC;
             else
                 printf "(%o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o",
                         lengthC, cardinalCode, C`LengthSeq, typeC;
             end if;
         when "Maximal" :
-            //N, M, d MixZpCode 
+            //N, M, d MixZpCode
             if assigned C`MinimumHomWeight then
-                printf "(%o, %o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n",  
-                        lengthC, cardinalCode, C`MinimumHomWeight, C`LengthSeq, typeC;    
+                printf "(%o, %o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n",
+                        lengthC, cardinalCode, C`MinimumHomWeight, C`LengthSeq, typeC;
                 if assigned C`CoveringRadius then
-                    printf "having a (%o, %o, %o) code over Zp as its Gray map image, 
+                    printf "having a (%o, %o, %o) code over Zp as its Gray map image,
                             with covering radius %o\n",
-                        MixZpLengthOverZp(C), cardinalCode, C`MinimumHomWeight, C`CoveringRadius; 
+                        MixZpLengthOverZp(C), cardinalCode, C`MinimumHomWeight, C`CoveringRadius;
                 else
                     printf "having a (%o, %o, %o) code over Zp as its Gray map image \n",
-                        MixZpLengthOverZp(C), cardinalCode, C`MinimumHomWeight;  
-                end if;          
+                        MixZpLengthOverZp(C), cardinalCode, C`MinimumHomWeight;
+                end if;
             else
-                printf "(%o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n",  
+                printf "(%o, %o) ZpZp^2..Zp^s-additive code of length %o and type %o\n",
                         lengthC, cardinalCode, C`LengthSeq, typeC;
                 printf "having a (%o, %o) code over Zp as its Gray map image \n",
                         MixZpLengthOverZp(C), cardinalCode;
             end if;
-            printf "Generator matrix:\n%o", GeneratorMatrix(C`Code); 
-        when "Magma" : 
+            printf "Generator matrix:\n%o", GeneratorMatrix(C`Code);
+        when "Magma" :
             p := #(C`BaseRing);
             printf "MixZpAdditiveCode(%O, %o, %O)", GeneratorMatrix(C`Code), "Magma", p,
                                           C`LengthSeq, "Magma";
@@ -608,13 +608,13 @@ end intrinsic;
 /*   - true if u is in C, and false otherwise                                */
 /*                                                                           */
 /*****************************************************************************/
-function IsMemberOf(u, C) 
+function IsMemberOf(u, C)
     p := #C`BaseRing;
     s := #C`LengthSeq;
-    RZps := RSpace(Integers(p^s), Length(C`Code)); 
+    RZps := RSpace(Integers(p^s), Length(C`Code));
     if Parent(u) cmpeq RZps then
         Mu := Matrix(u);
-        if not IsMixZpAdditiveOverZps(Mu, p, C`LengthSeq) then 
+        if not IsMixZpAdditiveOverZps(Mu, p, C`LengthSeq) then
             MixZpChangeMatrixZptoZps(~Mu, p, C`LengthSeq);
         end if;
         return Mu[1] in C`Code;
@@ -652,13 +652,13 @@ Return whether c is coercible into C and the result if so.
     if isCoercible then
         if IsMemberOf(v, C) then
             return true, v;
-        else        
+        else
             return false, "Illegal coercion";
         end if;
     else
         return false, "Illegal coercion";
-    end if; 
-    
+    end if;
+
 end intrinsic;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -690,7 +690,7 @@ NewCodeMixZp := function(code, p, lengthSeq)
     C`Code := code;
     C`Type := Reverse(ZpType(code));
     s := #lengthSeq;
-    
+
     if (#code eq 1) then
         C`ExtendType := ZeroMatrix(Integers(), s, s);
         C`MinimumHomWeightLowerBound := 0;
@@ -700,19 +700,19 @@ NewCodeMixZp := function(code, p, lengthSeq)
         C`HomWeightDistribution := [<0,1>];
         return C;
     end if;
-    
+
     // Trivial lower bound
     C`MinimumHomWeightLowerBound := 1;
     // Trivial upper bount
     //C`MinimumHomWeightUpperBound := MixZpLengthOverZp(C);
     // Singleton upper bound
-    singletonBound := MixZpLengthOverZp(C) - Ceiling(Log(p, #code)) +1; 
+    singletonBound := MixZpLengthOverZp(C) - Ceiling(Log(p, #code)) +1;
     //singletonBound := MixZpLengthOverZp(C) - &+[i*C`Type[i] : i in [1..s]] +1;
-    C`MinimumHomWeightUpperBound := singletonBound; 
+    C`MinimumHomWeightUpperBound := singletonBound;
     if C`MinimumHomWeightLowerBound eq C`MinimumHomWeightUpperBound then
         C`MinimumHomWeight := C`MinimumHomWeightLowerBound;
-    end if;   
-      
+    end if;
+
     return C;
 end function;
 
@@ -735,20 +735,20 @@ end function;
 /*                                                       -> MixZpCode        */
 /*                                                                           */
 /*****************************************************************************/
-intrinsic MixZpAdditiveCode(M::ModMatRngElt, p::RngIntElt, lengthSeq::[RngIntElt] 
+intrinsic MixZpAdditiveCode(M::ModMatRngElt, p::RngIntElt, lengthSeq::[RngIntElt]
                             : OverMixZp := false) -> MixZpCode
 {
-Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given 
-as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements 
-in M are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is 
-false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we 
-multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] 
-by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is 
-obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)  
-generated by M, where M is a m x (a_1+..+a_s) matrix over Zp^s. 
+Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given
+as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements
+in M are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is
+false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we
+multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i]
+by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is
+obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)
+generated by M, where M is a m x (a_1+..+a_s) matrix over Zp^s.
 
-For i in [1,..,s], the elements of M in coordinate positions X_i can be given as 
-elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they 
+For i in [1,..,s], the elements of M in coordinate positions X_i can be given as
+elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they
 are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
 }
     require Min(lengthSeq) ge 0: "Argument 3 must be a sequence of non-negative integers";
@@ -788,20 +788,20 @@ end intrinsic;
 /*                                                       -> MixZpCode        */
 /*                                                                           */
 /*****************************************************************************/
-intrinsic MixZpAdditiveCode(M::AlgMatElt, p::RngIntElt, lengthSeq::[RngIntElt] 
+intrinsic MixZpAdditiveCode(M::AlgMatElt, p::RngIntElt, lengthSeq::[RngIntElt]
                             : OverMixZp := false) -> MixZpCode
 {
-Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given 
-as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements 
-in M are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is 
-false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we 
-multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] 
-by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is 
-obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)  
-generated by M, where M is a m x (a_1+..+a_s) matrix over Zp^s. 
+Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given
+as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements
+in M are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is
+false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we
+multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i]
+by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is
+obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)
+generated by M, where M is a m x (a_1+..+a_s) matrix over Zp^s.
 
-For i in [1,..,s], the elements of M in coordinate positions X_i can be given as 
-elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they 
+For i in [1,..,s], the elements of M in coordinate positions X_i can be given as
+elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they
 are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
 }
     require Min(lengthSeq) ge 0: "Argument 3 must be a sequence of non-negative integers";
@@ -842,20 +842,20 @@ end intrinsic;
 /*                                                       -> MixZpCode        */
 /*                                                                           */
 /*****************************************************************************/
-intrinsic MixZpAdditiveCode(L::[ModTupRngElt], p::RngIntElt, lengthSeq::[RngIntElt] 
+intrinsic MixZpAdditiveCode(L::[ModTupRngElt], p::RngIntElt, lengthSeq::[RngIntElt]
                             : OverMixZp := false) -> MixZpCode
 {
-Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given 
-as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements 
-in L are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is 
-false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we 
-multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] 
-by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is 
-obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)  
-generated by L, where L is a sequence of vectors of length a_1+..+a_s over Zp^s. 
+Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given
+as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements
+in L are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is
+false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we
+multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i]
+by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is
+obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)
+generated by L, where L is a sequence of vectors of length a_1+..+a_s over Zp^s.
 
-For i in [1,..,s], the elements of L in coordinate positions X_i can be given as 
-elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they 
+For i in [1,..,s], the elements of L in coordinate positions X_i can be given as
+elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they
 are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
 }
     require not(IsEmpty(L)): "Argument 1 cannot be empty";
@@ -863,7 +863,7 @@ are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
     require &+lengthSeq eq OverDimension(L[1]):
              "Argument 3 is not compatible with the length of the code";
     Zps := Integers(p^#lengthSeq);
-    require (Type(BaseRing(L[1])) cmpeq RngIntRes) and (BaseRing(L[1]) cmpeq Zps): 
+    require (Type(BaseRing(L[1])) cmpeq RngIntRes) and (BaseRing(L[1]) cmpeq Zps):
             "Argument 1 does not contain vectors over Z/p^s";
     require IsPrime(p): "Argument 2 must be a prime number";
 
@@ -898,27 +898,27 @@ end intrinsic;
 /*                                                       -> MixZpCode        */
 /*                                                                           */
 /*****************************************************************************/
-intrinsic MixZpAdditiveCode(V::ModTupRng, p::RngIntElt, lengthSeq::[RngIntElt] 
+intrinsic MixZpAdditiveCode(V::ModTupRng, p::RngIntElt, lengthSeq::[RngIntElt]
                             : OverMixZp := false) -> MixZpCode
 {
-Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given 
-as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements 
-in V are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is 
-false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we 
-multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] 
-by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is 
-obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)  
-generated by V, where V is subspace of Zp^s^(a_1+..+a_s). 
+Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given
+as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements
+in V are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is
+false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we
+multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i]
+by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is
+obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)
+generated by V, where V is subspace of Zp^s^(a_1+..+a_s).
 
-For i in [1,..,s], the elements of V in coordinate positions X_i can be given as 
-elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they 
+For i in [1,..,s], the elements of V in coordinate positions X_i can be given as
+elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they
 are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
 }
     require Min(lengthSeq) ge 0: "Argument 3 must be a sequence of non-negative integers";
     require &+lengthSeq eq Degree(V):
              "Argument 3 is not compatible with the length of the code";
     Zps := Integers(p^#lengthSeq);
-    require (Type(BaseRing(V)) cmpeq RngIntRes) and (BaseRing(V) cmpeq Zps): 
+    require (Type(BaseRing(V)) cmpeq RngIntRes) and (BaseRing(V) cmpeq Zps):
             "Argument 1 does not contain vectors over Z/p^s";
     require IsPrime(p): "Argument 2 must be a prime number";
 
@@ -953,34 +953,34 @@ end intrinsic;
 /*                                                       -> MixZpCode        */
 /*                                                                           */
 /*****************************************************************************/
-intrinsic MixZpAdditiveCode(C::CodeLinRng, p::RngIntElt, lengthSeq::[RngIntElt] 
+intrinsic MixZpAdditiveCode(C::CodeLinRng, p::RngIntElt, lengthSeq::[RngIntElt]
                             : OverMixZp := false) -> MixZpCode
 {
-Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given 
-as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements 
-in C are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is 
-false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we 
-multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i] 
-by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is 
-obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)  
-generated by V, where V is subspace of Zp^s^(a_1+..+a_s). 
+Create a ZpZp^2..Zp^s-additive code C in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s given
+as a linear code over Zp^s. The parameter OverMixZp specifies whether the elements
+in C are elements in Zp^a_1 x Zp^2^a_2 x ... x Zp^s^a_s. The default value is
+false and the elements are in Zp^s^(a_1 +...+a_s). If OverMixZp is true, then we
+multiply the coordinates in positions X_i=[a_1+...+a_(i-1)+1, ..., a_1+...+a_i]
+by p^(s-i) for i in [1,...,s]. The corresponding linear code over Zp^s of C is
+obtained by using the function LinearCode() as a subspace of Zp^s^(a_1 +...+a_s)
+generated by V, where V is subspace of Zp^s^(a_1+..+a_s).
 
-For i in [1,..,s], the elements of C in coordinate positions X_i can be given as 
-elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they 
+For i in [1,..,s], the elements of C in coordinate positions X_i can be given as
+elements in Z_(p^i) or as elements in p^(s-i)Z_(p^i) subseteq Z_(p^s). If they
 are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
 }
     require Min(lengthSeq) ge 0: "Argument 3 must be a sequence of non-negative integers";
     require &+lengthSeq eq Length(C):
              "Argument 3 is not compatible with the length of the code";
     Zps := Integers(p^#lengthSeq);
-    require (Type(BaseRing(C)) cmpeq RngIntRes) and (BaseRing(C) cmpeq Zps): 
+    require (Type(BaseRing(C)) cmpeq RngIntRes) and (BaseRing(C) cmpeq Zps):
             "Argument 1 does not contain vectors over Z/p^s";
     require IsPrime(p): "Argument 2 must be a prime number";
 
     if (#C eq 1) then
         return MixZpAdditiveZeroCode(p, lengthSeq);
     end if;
-      
+
     M := Matrix(Basis(VectorSpace(C)));
     if OverMixZp then
 		MixZpChangeMatrixZptoZps(~M, p, lengthSeq);
@@ -989,16 +989,16 @@ are given as elements in Z_(p^i), then they are multiplied by p^(s-i).
     end if;
 
     D := NewCodeMixZp(LinearCode(M), p, lengthSeq);
-    
+
     //assign the minimum homogeneus weight or update the lower and upper bounds
     //if over_Z4(C) and assigned(C`MinimumLeeWeight) then
     //    UpdateMinimumHomWeightLowerBound(~D, C`MinimumLeeWeight - alpha);
     //    UpdateMinimumHomWeightUpperBound(~D, C`MinimumLeeWeight);
     //else
     //    UpdateMinimumHomWeightLowerBound(~D, C`MinimumWeightLowerBound);
-    //    UpdateMinimumHomWeightUpperBound(~D, 2*C`MinimumWeightUpperBound); 
+    //    UpdateMinimumHomWeightUpperBound(~D, 2*C`MinimumWeightUpperBound);
     //end if;
-    
+
     return D;
 
 end intrinsic;
@@ -1025,17 +1025,17 @@ end intrinsic;
 intrinsic MixZpAdditiveCode(C::CodeLinRng, s::RngIntElt) -> MixZpCode
 {
 Given a linear code C over Z/p^i, 1 ≤ i ≤ s, of type (n; t_1,..., t_i), return
-the ZpZp^2..Zp^s-additive code of type (a_1,...,a_s; t_1,...,t_i,0,...,0) 
+the ZpZp^2..Zp^s-additive code of type (a_1,...,a_s; t_1,...,t_i,0,...,0)
 corresponding to C, where a_i=n and a_j=0 for all j in [1,..., s]\[i].
 }
-    isOverZps, p, i := IsLinearCodeOverZps(C); 
+    isOverZps, p, i := IsLinearCodeOverZps(C);
     require isOverZps and (i ge 1): "The code must be over Z/p^i, with i>=1";
     require i le s: "Argument 2 must be greater than or equal to", i;
-    
+
     G := ChangeRing(GeneratorMatrix(C), Integers(p^s));
     lengthSeq := [0^^s];
     lengthSeq[i] := NumberOfColumns(G);
-    
+
     return MixZpAdditiveCode(G, p, lengthSeq : OverMixZp := true);
 
 end intrinsic;
@@ -1063,24 +1063,24 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic MixZpAdditiveCode(T::[Tup]) -> MixZpCode
 {
-Given a sequence T of elements of the cartesian product set Zp^(a_1) × Zp2^(a_2) 
-×...× (Zp^s)^a_s, return the ZpZp^2..Zp^s-additive code of type (a_1,..., a_s; 
-t_1,..., t_s) generated by T. The code is represented as a linear code over Z_p^s 
-after multiplying the coordinates in positions X_i = [a_1 +...+ a_(i−1) + 1,..., 
+Given a sequence T of elements of the cartesian product set Zp^(a_1) × Zp2^(a_2)
+×...× (Zp^s)^a_s, return the ZpZp^2..Zp^s-additive code of type (a_1,..., a_s;
+t_1,..., t_s) generated by T. The code is represented as a linear code over Z_p^s
+after multiplying the coordinates in positions X_i = [a_1 +...+ a_(i−1) + 1,...,
 a_1 +...+ a_i] by p^(s−i) for i in [1,..., s].
 }
     require not IsEmpty(T): "Argument cannot be empty";
-    
+
     s := #T[1];
     for i in [1..s] do
-        require Type(T[1][i]) cmpeq ModTupRngElt: 
+        require Type(T[1][i]) cmpeq ModTupRngElt:
             "Argument must be a sequence of tuples containing vectors over a ring";
     end for;
     R := BaseRing(T[1][1]);
-    isFiniteRing, p := IsFinite(R); 
+    isFiniteRing, p := IsFinite(R);
     require isFiniteRing: "The vectors in the tuples must be over a finite ring";
     for i in [1..s] do
-        require BaseRing(T[1][i]) eq Integers(p^i): 
+        require BaseRing(T[1][i]) eq Integers(p^i):
             "The i-th component vector in the tuples must be over the ring Z/p^i";
     end for;
     require IsPrime(p): "The first vector in the tuples must be over Z/p, with p prime";
@@ -1091,7 +1091,7 @@ a_1 +...+ a_i] by p^(s−i) for i in [1,..., s].
     lengthSeq := [Ncols(T[1][i]) : i in [1..s]];
 
     return MixZpAdditiveCode(L, p, lengthSeq);
-    
+
 end intrinsic;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1118,39 +1118,39 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic MixZpAdditiveUniverseCode(p::RngIntElt, lengthSeq::[RngIntElt]) -> MixZpCode
 {
-Given a prime number p and a sequence of non-negative integers lengthSeq, return the 
-ZpZp^2..Zp^s-additive code of type (lengthSeq; lengthSeq) consisting of all 
+Given a prime number p and a sequence of non-negative integers lengthSeq, return the
+ZpZp^2..Zp^s-additive code of type (lengthSeq; lengthSeq) consisting of all
 possible codewords.
 }
     require Min(lengthSeq) ge 0: "Argument 2 must be a sequence of non-negative integers";
-    require &+lengthSeq gt 0: 
+    require &+lengthSeq gt 0:
         "Argument 2 must be a sequence such that the sum of its elements is greater than 0";
     require IsPrime(p): "Argument 1 must be a prime number";
-    
+
     s := #lengthSeq;
     Zps := Integers(p^s);
     G := DiagonalMatrix(Zps, &cat[[(p^(s-i))^^lengthSeq[i]] :  i in [1..s]]);
     C := MixZpAdditiveCode(G, p, lengthSeq);
-    
+
     C`ExtendType := DiagonalMatrix(Integers(), lengthSeq);
 
     // compute the position of the first non-zero element in lengthSeq
     minNotZeroType := 1;
-    while IsZero(lengthSeq[minNotZeroType]) do 
+    while IsZero(lengthSeq[minNotZeroType]) do
         minNotZeroType +:=1;
-    end while;  
-    // compute the minimum homogeneous weight  
-    if (minNotZeroType eq 1) then 
+    end while;
+    // compute the minimum homogeneous weight
+    if (minNotZeroType eq 1) then
         minHomWeight := 1;
-    else 
-        minHomWeight := p^(minNotZeroType-2)*(p-1);  
-    end if; 
+    else
+        minHomWeight := p^(minNotZeroType-2)*(p-1);
+    end if;
     C`MinimumHomWeightLowerBound := minHomWeight;
     C`MinimumHomWeightUpperBound := minHomWeight;
     C`MinimumHomWeight := minHomWeight;
     C`MinimumHomWeightWord := G[1];
     //C`HomWeightDistribution := [<0,1> ...];
-    
+
     return C;
 
 end intrinsic;
@@ -1173,18 +1173,18 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic MixZpAdditiveZeroCode(p::RngIntElt, lengthSeq::[RngIntElt]) -> MixZpCode
 {
-Given a prime number p and a sequence of non-negative integers lengthSeq, return the 
-ZpZp^2..Zp^s-additive code of type (lengthSeq; 0,...,0) consisting of only the zero 
+Given a prime number p and a sequence of non-negative integers lengthSeq, return the
+ZpZp^2..Zp^s-additive code of type (lengthSeq; 0,...,0) consisting of only the zero
 codeword.
 }
     require Min(lengthSeq) ge 0: "Argument 2 must be a sequence of non-negative integers";
-    require &+lengthSeq gt 0: 
+    require &+lengthSeq gt 0:
         "Argument 2 must be a sequence such that the sum of its elements is greater than 0";
     require IsPrime(p): "Argument 1 must be a prime number";
-    
+
     s := #lengthSeq;
     Zps := Integers(p^s);
-    
+
     return MixZpAdditiveCode(Matrix(Zps, [[0 : i in [1..&+lengthSeq]]]), p, lengthSeq);
     //the minimum weight and bounds are assigned in NewCodeMixZp function
 
@@ -1215,17 +1215,17 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic RandomMixZpAdditiveCode(p::RngIntElt, lengthSeq::[RngIntElt]) -> MixZpCode
 {
-Given a prime number p and a sequences of non-negative integers lengthSeq, return 
-a random ZpZp^2..Zp^s-additive code of type (lengthSeq; t_1,..,t_s) for some 
+Given a prime number p and a sequences of non-negative integers lengthSeq, return
+a random ZpZp^2..Zp^s-additive code of type (lengthSeq; t_1,..,t_s) for some
 non-negative integers t_1,..., t_s.
 }
     require Min(lengthSeq) ge 0: "Argument 2 must be a sequence of non-negative integers";
     n := &+lengthSeq;
-    require n gt 0: 
+    require n gt 0:
         "Argument 2 must be a sequence such that the sum of its elements is greater than 0";
     require IsPrime(p): "Argument 1 must be a prime number";
 
-    k := Random(n); 
+    k := Random(n);
     _, G := RandomZpAdditiveCode(p, n, #lengthSeq, k);
 
     MixZpChangeMatrixZptoZps(~G, p, lengthSeq);
@@ -1258,8 +1258,8 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic MixZpLength(C::MixZpCode) -> RngIntElt, SeqEnum
 {
-Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the 
-length n = &+lengthSeq, and the sequence lengthSeq with lengthSeq[i] the number  
+Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the
+length n = &+lengthSeq, and the sequence lengthSeq with lengthSeq[i] the number
 of coordinates over Z/2^i for i in [1..s].
 }
     return Length(C`Code), C`LengthSeq;
@@ -1285,11 +1285,11 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic MixZpLengthOverZp(C::MixZpCode) -> RngIntElt
 {
-Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the 
-length n_p = a_1 + p*a_2 + ..+ p^(s-1)*a_s, where lengthSeq=[a_1,..,a_s], which 
-corresponds to the length of the code C_p = Phi(C) over Zp, where Phi is the 
-Gray map considered in this package.  
-}  
+Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the
+length n_p = a_1 + p*a_2 + ..+ p^(s-1)*a_s, where lengthSeq=[a_1,..,a_s], which
+corresponds to the length of the code C_p = Phi(C) over Zp, where Phi is the
+Gray map considered in this package.
+}
     p := #C`BaseRing;
     return &+[ C`LengthSeq[i] * p^(i-1) : i in [1..#C`LengthSeq] ];
 
@@ -1312,8 +1312,8 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic MixZpType(C::MixZpCode) -> SeqEnum
 {
-Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return both 
-sequences lengthSeq and typeSeq. 
+Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return both
+sequences lengthSeq and typeSeq.
 }
     return C`LengthSeq, Reverse(ZpType(C`Code));
 
@@ -1336,8 +1336,8 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic '#'(C::MixZpCode) -> RngIntElt
 {
-Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the 
-number of codewords belonging to C, that is, p^(t_1+2t_2+..+st_s), where 
+Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the
+number of codewords belonging to C, that is, p^(t_1+2t_2+..+st_s), where
 typeSeq = [t_1,t_2,..,t_s].
 }
     return #C`Code;
@@ -1362,8 +1362,8 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic InformationRate(C::MixZpCode) -> FldRatElt
 {
-Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the 
-information rate of C, that is, the ratio (t_1+2t_2+..+st_s)/n_p, where typeSeq = 
+Given a ZpZp^2..Zp^s-additive code C of type (lengthSeq; typeSeq), return the
+information rate of C, that is, the ratio (t_1+2t_2+..+st_s)/n_p, where typeSeq =
 [t_1,..,t_s], lengthSeq = [a_1,..,a_s], and n_p = a_1 + p*a_2 +..+ p^(s-1)*a_s.
 }
     p := #C`BaseRing;
@@ -1393,7 +1393,7 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic CarletGrayMap(C::MixZpCode) -> Map
 {
-Given a ZpZp^2..Zp^s-additive code, return the generalized Gray map Phi for C. 
+Given a ZpZp^2..Zp^s-additive code, return the generalized Gray map Phi for C.
 This is the map from C to Phi(C).
 }
     //Codomain
@@ -1405,7 +1405,7 @@ This is the map from C to Phi(C).
     mapsSeq := [ CarletGrayMap(p, i) : i in [1..s] ];
 
     Lseq := MixZpCoordinatesPartition(C`LengthSeq);
-    return map< C`Code -> Vn | c :-> Vn!Flat( [[GF(p)!(c[j] div p^(s-1)) : j in Lseq[1] ]] cat 
+    return map< C`Code -> Vn | c :-> Vn!Flat( [[GF(p)!(c[j] div p^(s-1)) : j in Lseq[1] ]] cat
                                 [Flat( [ Eltseq( mapsSeq[i](Integers(p^i)!(c[j] div p^(s-i))))
                                                           : j in Lseq[i] ]) : i in [2..s] ])>;
                           //y :-> [ Flat([ (c[j], i) : j in Lseq[i]])  : i in [1..s]]  >;
@@ -1432,10 +1432,10 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic CarletGrayMapImage(C::MixZpCode) -> SeqEnum //[ModTupFldElt]
 {
-Given a ZpZp^2..Zp^s-additive code of type (lengthSeq, typeSeq), return the image 
-of C under the generalized Gray map Phi as a sequence of vectors in Fp^n_p, where 
-n_p = a_1 + p*a_2 + ..+ p^(s-1)a_s and lengthSeq = [a_1,..,a_s]. As the resulting 
-image may not be a linear code over Fp, a sequence of vectors is returned rather 
+Given a ZpZp^2..Zp^s-additive code of type (lengthSeq, typeSeq), return the image
+of C under the generalized Gray map Phi as a sequence of vectors in Fp^n_p, where
+n_p = a_1 + p*a_2 + ..+ p^(s-1)a_s and lengthSeq = [a_1,..,a_s]. As the resulting
+image may not be a linear code over Fp, a sequence of vectors is returned rather
 than a code.
 }
     mapGray := CarletGrayMap(C);
@@ -1464,19 +1464,19 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic HasLinearCarletGrayMapImage(C::MixZpCode) -> BoolElt, CodeLinFld, Map
 {
-Given a ZpZp^2..Zp^s-additive code, return true if and only if the image of C 
-under the generalized Gray map Phi is a linear code over GF(p). If so, the 
+Given a ZpZp^2..Zp^s-additive code, return true if and only if the image of C
+under the generalized Gray map Phi is a linear code over GF(p). If so, the
 function also returns the image B as a linear code, together with the bijection
 Phi : C -> B.
 }
     isLinear := HasLinearCarletGrayMapImage(C`Code);
-    if isLinear then 
+    if isLinear then
         Cp := LinearCode(Matrix(CarletGrayMapImage(C)));
         mapGray := CarletGrayMap(C);
         bijection := map<C -> Cp  | v :-> mapGray(v)>;
         //w :-> w @@ mapGray >;
         return true, Cp, bijection;
-    else 
+    else
         return false;
     end if;
 
@@ -1530,7 +1530,7 @@ end function;
 /*****************************************************************************/
 function MatrixRepetition(M, newRow)
     rowMatrix := HorizontalJoin(<M : i in [1..#newRow]>);
-    rowVector := Matrix(BaseRing(M), [&cat[[a^^Ncols(M)] : a in newRow]]);  
+    rowVector := Matrix(BaseRing(M), [&cat[[a^^Ncols(M)] : a in newRow]]);
     return VerticalJoin(rowMatrix, rowVector);
 end function;
 
@@ -1638,19 +1638,19 @@ end function;
 /* Signature: (<IntRngElt> p, <SeqEnum> L) -> MixZpCode, ModMatRngElt        */
 /*                                                                           */
 /*****************************************************************************/
-intrinsic MixZpHadamardCode(p::RngIntElt, L:: SeqEnum : OverMixZp := true) 
+intrinsic MixZpHadamardCode(p::RngIntElt, L:: SeqEnum : OverMixZp := true)
                                                       -> MixZpCode, ModMatRngElt
 {
-Given a prime number p and a sequence L of non-negative integers, return a 
+Given a prime number p and a sequence L of non-negative integers, return a
 ZpZp^2..Zp^s-additive Hadamard code of type (a_1,..,a_s; L) along with a generator
-matrix. The parameter OverZps specifies whether the code is over Z_p^s, that is 
-with a_1=...=a_(s-1)=0, or, otherwise, a_1<>0, ..., a_(s-1)<>0. The default value 
+matrix. The parameter OverZps specifies whether the code is over Z_p^s, that is
+with a_1=...=a_(s-1)=0, or, otherwise, a_1<>0, ..., a_(s-1)<>0. The default value
 is false.
 }
     require IsPrime(p): "The first parameter must be a prime number";
     s := #L;
     require L[s] ge 1: "The last integer in argument 2 must be greater than 0";
-    if OverMixZp then 
+    if OverMixZp then
         require L[1] ge 1: "The first integer in argument 2 must be greater than 0";
     end if;
 
@@ -1659,7 +1659,7 @@ is false.
         return MixZpAdditiveCode(CZps, p, [0^^(s-1)] cat [Length(CZps)]);
     end if;
 
-    // The implementation take into account that the type is Reverse(L)!  
+    // The implementation take into account that the type is Reverse(L)!
     L := Reverse(L);
 
     s := #L;
@@ -1712,9 +1712,9 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic Name(C::MixZpCode, i::RngIntElt) -> ModTupRngElt
 {
-Given a ZpZp^2..Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s) and a 
-positive integer j, return the j-thgenerator of C as a linear code over Zp^s, 
-where the coordinates in positions Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_i] are 
+Given a ZpZp^2..Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s) and a
+positive integer j, return the j-thgenerator of C as a linear code over Zp^s,
+where the coordinates in positions Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_i] are
 multiplied by p^(s-1) for i in [1,...,s].
 }
     requirerange i, 1, Ngens(C`Code);
@@ -1743,9 +1743,9 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic '.'(C::MixZpCode, i::RngIntElt) -> ModTupRngElt
 {
-Given a ZpZp^2..Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s) and a 
-positive integer j, return the j-thgenerator of C as a linear code over Zp^s, 
-where the coordinates in positions Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_i] are 
+Given a ZpZp^2..Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s) and a
+positive integer j, return the j-thgenerator of C as a linear code over Zp^s,
+where the coordinates in positions Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_i] are
 multiplied by p^(s-1) for i in [1,...,s].
 }
     requirerange i, 1, Ngens(C`Code);
@@ -1772,8 +1772,8 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic Set(C::MixZpCode) -> SetEnum
 {
-Given a ZpZp^2...Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s), return 
-the set containing all its codewords, where the coordinates in positions 
+Given a ZpZp^2...Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s), return
+the set containing all its codewords, where the coordinates in positions
 Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_s] are multiplied by p^(s-1) for i in [1,...,s].
 }
     return Set(C`Code);
@@ -1837,7 +1837,7 @@ intrinsic 'ne'(C::MixZpCode, D::MixZpCode) -> BoolElt
 Return true if and only if the ZpZp^2..Zp^s-additive codes C and D are not equal.
 }
     return not(C eq D);
-    
+
 end intrinsic;
 
 /*****************************************************************************/
@@ -1893,7 +1893,7 @@ Return true if and only if the ZpZp^2..Zp^s-additive code C is not a subcode of
 the ZpZp^2..Zp^s-additive code D.
 }
     return not (C subset D);
-    
+
 end intrinsic;
 
 /*****************************************************************************/
@@ -1918,17 +1918,17 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic 'in'(u::ModTupRngElt, C::MixZpCode) -> BoolElt
 {
-Return true if and only if the vector u belongs to the ZpZp^2..Zp^s-additive 
-code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either 
+Return true if and only if the vector u belongs to the ZpZp^2..Zp^s-additive
+code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either
 as a vector in (Z/p^s)^(a_1 +...+ a_s), where the coordinates in positions X_i =
-[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i 
-in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x 
+[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i
+in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x
 .. x (Zp^s)^a_s.
 }
     coercible, _ := IsCoercible(C, u);
 
-    return coercible;  
-       
+    return coercible;
+
 end intrinsic;
 
 /*****************************************************************************/
@@ -1952,29 +1952,29 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic 'in'(u::Tup, C::MixZpCode) -> BoolElt
 {
-Return true if and only if the vector u belongs to the ZpZp^2..Zp^s-additive 
-code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either 
+Return true if and only if the vector u belongs to the ZpZp^2..Zp^s-additive
+code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either
 as a vector in (Z/p^s)^(a_1 +...+ a_s), where the coordinates in positions X_i =
-[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i 
-in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x 
+[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i
+in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x
 .. x (Zp^s)^a_s.
 }
     p := #C`BaseRing;
     s := #C`LengthSeq;
     require s eq #u: "Argument 1 must be a tuple with the proper number of components";
     for i in [1..s] do
-        require Type(u[i]) cmpeq ModTupRngElt: 
+        require Type(u[i]) cmpeq ModTupRngElt:
             "Argument 1 must be a tuple containg vectors over a ring";
-        require BaseRing(u[i]) cmpeq Integers(p^i): 
+        require BaseRing(u[i]) cmpeq Integers(p^i):
             "The i-th component vector in the tuple must be over the ring Z/p^i";
-        require Degree(u[i]) eq C`LengthSeq[i]: 
+        require Degree(u[i]) eq C`LengthSeq[i]:
             "The i-th component vector in the tuple must have the proper length";
     end for;
 
     coercible, _ := IsCoercible(C, FromMixZptoZps(u, p));
 
-    return coercible; 
-    
+    return coercible;
+
 end intrinsic;
 
 /*****************************************************************************/
@@ -1999,15 +1999,15 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic 'notin'(u::ModTupRngElt, C::MixZpCode) -> BoolElt
 {
-Return true if and only if the vector u does not belongs to the ZpZp^2..Zp^s-additive 
-code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either 
+Return true if and only if the vector u does not belongs to the ZpZp^2..Zp^s-additive
+code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either
 as a vector in (Z/p^s)^(a_1 +...+ a_s), where the coordinates in positions X_i =
-[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i 
-in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x 
+[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i
+in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x
 .. x (Zp^s)^a_s.
 }
-    return not (u in C);   
-    
+    return not (u in C);
+
 end intrinsic;
 
 /*****************************************************************************/
@@ -2031,15 +2031,15 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic 'notin'(u::Tup, C::MixZpCode) -> BoolElt
 {
-Return true if and only if the vector u does not belongs to the ZpZp^2..Zp^s-additive 
-code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either 
+Return true if and only if the vector u does not belongs to the ZpZp^2..Zp^s-additive
+code C of type (a_1,..., a_s; t_1,..., t_s). The vector u can be given either
 as a vector in (Z/p^s)^(a_1 +...+ a_s), where the coordinates in positions X_i =
-[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i 
-in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x 
+[a_1+...+a_(i−1)+1,..., a_1+...+a_i] are in p^(s−i)Z/i subset of Z/p^s for i
+in [1,...,s]; or as a tuple in the cartesian product set Zp^a_1 x (Zp^2)^a_2 x
 .. x (Zp^s)^a_s.
 }
-    return not (u in C);  
-     
+    return not (u in C);
+
 end intrinsic;
 
 /*****************************************************************************/
@@ -2062,26 +2062,26 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic IsZero(u::Tup) -> BoolElt
 {
-Return true if and only if the codeword u is the zero vector. The codeword u can 
+Return true if and only if the codeword u is the zero vector. The codeword u can
 be given either as a vector in (Zp^s)^(a_1+...+ a_s) or as a tuple in the cartesian
 product set (Zp)^a_1 × (Zp^2)^a_2 ×...× (Zp^s)^a_s.
 }
     p := #BaseRing(u[1]);
-    require IsPrime(p): 
+    require IsPrime(p):
         "The first vector in the tuple must be over Z/p, with p prime";
 
     for i in [1..#u] do
         require Type(u[i]) cmpeq ModTupRngElt:
             "Argument 1 must be a tuple containing vectors over a ring";
-        require BaseRing(u[i]) cmpeq Integers(p^i): 
+        require BaseRing(u[i]) cmpeq Integers(p^i):
             "The i-th component vector in the tuple must be over the ring Z/p^i";
         if not IsZero(u[i]) then
             return false;
         end if;
     end for;
-    
+
     return true;
-    
+
 end intrinsic;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2109,10 +2109,10 @@ end intrinsic;
 /*****************************************************************************/
 intrinsic Random(C::MixZpCode) -> ModTupRngElt
 {
-Given a ZpZp^2...Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s), which 
-is represented as a subspace of (Zp^s)^n with n=a_1+...+a_n, return a random 
-codeword of C, which is a vector in (Zp^s)^n where the coordinates in positions 
-Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_s] are multiplied by p^(s-1) for i in 
+Given a ZpZp^2...Zp^s-additive code C of type (a_1,...,a_s; t_1,...,t_s), which
+is represented as a subspace of (Zp^s)^n with n=a_1+...+a_n, return a random
+codeword of C, which is a vector in (Zp^s)^n where the coordinates in positions
+Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_s] are multiplied by p^(s-1) for i in
 [1,...,s].
 }
     return Random(C`Code);
