@@ -5,4 +5,3 @@ load "test/LinearBinaryCode_test.m";
 load "test/Z2Z4Z8_test.m";
 print "ALL_TESTS_PASSED";
 quit;
-
