@@ -12,7 +12,7 @@
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful, 
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -48,7 +48,7 @@
 
 intrinsic ZpAdditiveCodes_Core_version() -> SeqEnum
 {Return the current version of this package.}
-    
+
     version := [2, 1];
     return version;
 
@@ -59,7 +59,7 @@ end intrinsic;
 ///////            CARLET'S GENERALIZED GRAY MAP FUNCTIONS              ////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
- 
+
 /****************************************************************/
 /*                                                              */
 /* Function name: ParyExpansion                                 */
@@ -80,7 +80,7 @@ ParyExpansion := function(u)
     s := Valuation(sizeRing, p);
     V := VectorSpace(GF(p), s);
 
-    uParyShort := Intseq(Integers()!u, p);    
+    uParyShort := Intseq(Integers()!u, p);
     uPary := uParyShort cat [0^^(s-#uParyShort)];
     return [Integers(p)!ui : ui in uPary];
 end function;
@@ -89,7 +89,7 @@ end function;
 /*                                                              */
 /* Function name: ParyComposition                               */
 /* Parameters: uZp                                              */
-/* Function description: Given a sequence [u_0,...,u_{s-1}] over*/ 
+/* Function description: Given a sequence [u_0,...,u_{s-1}] over*/
 /*   GF(p), it returns u = u_0 * p^0 + ... + u_{s-1} * p^(s-1)  */
 /*   as an element of Z/p^s.                                    */
 /* Input parameters description:                                */
@@ -134,7 +134,7 @@ PhiZp := function(u, Y)
     V := VectorSpace(GF(p), Ncols(Y));
     W := VectorSpace(GF(p), sMinus1);
     uPary := ParyExpansion(u);
-   
+
     //Partition the p-ary expansion of u in the first elements and the last element
     uParted := Partition(uPary, [sMinus1, 1]);
     firstElements := uParted[1];
@@ -178,7 +178,7 @@ PhiZpInverse := function(uPary, Y)
     firstElements := Eltseq(Solution(Y, w));
     lastElement := [uPary[1]];
     uExpansion := firstElements cat lastElement;
-    
+
     return ParyComposition(uExpansion);
 end function;
 
@@ -197,10 +197,10 @@ end function;
 /*                                                              */
 /* Signature: (<RngIntElt> p, <RngIntElt> s) -> Map             */
 /*                                                              */
-/****************************************************************/ 
-intrinsic CarletGrayMap(p::RngIntElt, s::RngIntElt) -> Map 
+/****************************************************************/
+intrinsic CarletGrayMap(p::RngIntElt, s::RngIntElt) -> Map
 {
-Given a prime p and an integer s>1, this function returns Carlet's 
+Given a prime p and an integer s>1, this function returns Carlet's
 generalized Grap map phi_s from Z/(p^s)^n to Zp^(p^(s-1)).
 }
     require IsPrime(p): "Argument 1 must be a prime number";
@@ -209,21 +209,21 @@ generalized Grap map phi_s from Z/(p^s)^n to Zp^(p^(s-1)).
     //Domain
     Zps := Integers(p^s);
 
-    if s eq 1 then 
+    if s eq 1 then
         return map< Zps -> Zps | x :-> x, y :-> y >;
-    else 
+    else
         //Codomain
         K := GF(p);
         nparyCoordinate := p^(s-1);
-        V := VectorSpace(K, nparyCoordinate); 
+        V := VectorSpace(K, nparyCoordinate);
         //The matrix used in the Gray map
         Y := Transpose(Matrix([x : x in VectorSpace(K, s-1)]));
         YwithOnes := ZeroMatrix(K, s, nparyCoordinate);
         InsertBlock(~YwithOnes, Y, 1, 1);
         InsertBlock(~YwithOnes, Vector(K, [1^^(nparyCoordinate)]), s, 1);
         W := VectorSpace(GF(p), s);
-    
-        return map< Zps -> V | x :-> PhiZp_YwithOnes(x, YwithOnes, W), 
+
+        return map< Zps -> V | x :-> PhiZp_YwithOnes(x, YwithOnes, W),
                                y :-> Zps!PhiZpInverse_YwithOnes(y, YwithOnes) >;
     end if;
 
@@ -265,7 +265,7 @@ end function;
 /*   - A vector of Zps^n (codeword)                             */
 /*                                                              */
 /****************************************************************/
-ZpsPhiInverseCodeword := function(cpary, Y, nparyCoordinate, n, V)    
+ZpsPhiInverseCodeword := function(cpary, Y, nparyCoordinate, n, V)
     cParted := Partition(Eltseq(cpary), [nparyCoordinate^^n]);
     return &cat[[PhiZpInverse(V!i, Y)] : i in cParted];
 end function;
@@ -281,25 +281,25 @@ end function;
 /*   - C : a code over a ring                                   */
 /* Output parameters description:                               */
 /*   - true if and only if the ring is Z/p^s                    */
-/*   - the integer p if the code is over Z/p^s, and 0 otherwise */ 
+/*   - the integer p if the code is over Z/p^s, and 0 otherwise */
 /*   - the integer s if the code is over Z/p^s, and 0 otherwise */
 /*                                                              */
-/****************************************************************/ 
+/****************************************************************/
 IsLinearCodeOverZps := function(C)
-    alphabet := Alphabet(C);  
+    alphabet := Alphabet(C);
     if Type(alphabet) eq RngIntRes then
         sizeRing := #alphabet;
         p := Factorization(sizeRing)[1][1];
         s, b := Valuation(sizeRing, p);
-        if b eq 1 then 
-            return true, p, s; 
+        if b eq 1 then
+            return true, p, s;
         else
             return false, 0, 0;
-        end if; 
+        end if;
     else
         return false, 0, 0;
-    end if; 
-end function; 
+    end if;
+end function;
 
 /****************************************************************/
 /*                                                              */
@@ -312,25 +312,25 @@ end function;
 /*   - G : a matrix over a ring                                 */
 /* Output parameters description:                               */
 /*   - true if and only if the ring is Z/p^s                    */
-/*   - the integer p if the code is over Z/p^s, and 0 otherwise */ 
+/*   - the integer p if the code is over Z/p^s, and 0 otherwise */
 /*   - the integer s if the code is over Z/p^s, and 0 otherwise */
 /*                                                              */
-/****************************************************************/ 
+/****************************************************************/
 IsMatrixOverZps := function(G)
-    ring := BaseRing(G);  
+    ring := BaseRing(G);
     if Type(ring) eq RngIntRes then
         sizeRing := #ring;
         p := Factorization(sizeRing)[1][1];
         s, b := Valuation(sizeRing, p);
-        if b eq 1 then 
-            return true, p, s; 
+        if b eq 1 then
+            return true, p, s;
         else
             return false, 0, 0;
-        end if; 
+        end if;
     else
         return false, 0, 0;
-    end if; 
-end function; 
+    end if;
+end function;
 
 /****************************************************************/
 /*                                                              */
@@ -346,16 +346,16 @@ end function;
 /*                                                              */
 /* Signature: (<CodeLinRng> C) -> Map                           */
 /*                                                              */
-/****************************************************************/ 
-intrinsic CarletGrayMap(C::CodeLinRng) -> Map 
+/****************************************************************/
+intrinsic CarletGrayMap(C::CodeLinRng) -> Map
 {
-Given a linear code C over Z/p^s of length n, this function returns Carlet's 
+Given a linear code C over Z/p^s of length n, this function returns Carlet's
 generalized Gray map for C. This is the map phi_s from C to Zp^(n*p^(s-1)).
 
 If the linear code C is over Z4, function CarletGrayMap(C) coincides with
 function GrayMap(C), which works only for linear codes over Z4.
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 1): "The code C must be over Z/p^s with s>0";
 
     //The matrix used in the Gray Map
@@ -363,10 +363,10 @@ function GrayMap(C), which works only for linear codes over Z4.
 
     //Codomain
     n := Length(C);
-    nparyCoordinate := Ncols(Y); 
+    nparyCoordinate := Ncols(Y);
     V := VectorSpace(GF(p), nparyCoordinate);
     Vn := VectorSpace(GF(p), n*nparyCoordinate);
-   
+
     return map< C -> Vn | c :-> ZpsPhiCodeword(c, Y),
                 y :-> C!ZpsPhiInverseCodeword(y, Y, nparyCoordinate, n, V) >;
 
@@ -389,15 +389,15 @@ end intrinsic;
 /*                                                              */
 /* Signature: (<CodeLinRng> C) -> [ModTupFldElt]                */
 /*                                                              */
-/****************************************************************/ 
-intrinsic CarletGrayMapImage(C::CodeLinRng) -> SeqEnum //[ModTupFldElt] 
+/****************************************************************/
+intrinsic CarletGrayMapImage(C::CodeLinRng) -> SeqEnum //[ModTupFldElt]
 {
-Given a code C over Z/p^s of length n, this function returns the image of C under 
-Carlet's generalized Gray map as a sequence of vectors in GF(p)^(n*p^(s-1)). 
-As the resulting image may not be a linear code over GF(p), a sequence of vectors 
+Given a code C over Z/p^s of length n, this function returns the image of C under
+Carlet's generalized Gray map as a sequence of vectors in GF(p)^(n*p^(s-1)).
+As the resulting image may not be a linear code over GF(p), a sequence of vectors
 is returned rather than a code.
 
-If the linear code C is over Z4, function CarletGrayMapImage(C) coincides 
+If the linear code C is over Z4, function CarletGrayMapImage(C) coincides
 with GrayMapImage(C), which works only for linear codes over Z4.
 }
     mapGray := CarletGrayMap(C);
@@ -422,7 +422,7 @@ end intrinsic;
 /*                                                              */
 /* Function developed by Adrián Torres                          */
 /*                                                              */
-/****************************************************************/ 
+/****************************************************************/
 ZpsPhiInformationSet := func< p, s | [1] cat [p^i + 1 : i in [0..(s-2)]] >;
 
 /****************************************************************/
@@ -441,10 +441,10 @@ ZpsPhiInformationSet := func< p, s | [1] cat [p^i + 1 : i in [0..(s-2)]] >;
 /*                                                              */
 /* Function developed by Adrián Torres                          */
 /*                                                              */
-/****************************************************************/ 
+/****************************************************************/
 ZpsPhiInfo := function(u, T)
     sizeRing := #Parent(u[1]);
-    // The size of the ring is always p^s, since the ring is Z/p^s 
+    // The size of the ring is always p^s, since the ring is Z/p^s
     ps := Factorization(sizeRing)[1];
     p := ps[1];
     s := ps[2];
@@ -454,7 +454,7 @@ ZpsPhiInfo := function(u, T)
     for i in [1..s] do
         Y := Transpose(Matrix([x : x in VectorSpace(GF(p), s-i)]));
         Y := VerticalJoin(Y, Vector(GF(p), [1^^(p^(s-i))]));
-        Yrestricted := Submatrix(Y, [1..Nrows(Y)], 
+        Yrestricted := Submatrix(Y, [1..Nrows(Y)],
                                     ZpsPhiInformationSet(p, s-i+1));
         V := VectorSpace(GF(p), s-i+1);
         for j in [1..T[i]] do
@@ -487,7 +487,7 @@ end function;
 /*                                                              */
 /* Function developed by Adrián Torres                          */
 /*                                                              */
-/****************************************************************/ 
+/****************************************************************/
 ZpsPhiInverseInfo := function(v, T)
     s := #T;
     p := #Parent(v[1]);
@@ -498,7 +498,7 @@ ZpsPhiInverseInfo := function(v, T)
     for i in [1..s] do
         Y := Transpose(Matrix([x : x in VectorSpace(GF(p), s-i)]));
         Y := VerticalJoin(Y, Vector(GF(p), [1^^(p^(s-i))]));
-        Yrestricted := Submatrix(Y, [1..Nrows(Y)], 
+        Yrestricted := Submatrix(Y, [1..Nrows(Y)],
                                     ZpsPhiInformationSet(p, s-i+1));
         V := VectorSpace(GF(p), s-i+1);
         for j in [1..T[i]] do
@@ -581,9 +581,9 @@ MultiplyByP := function(u, p, T)
 end function;
 
 /****************************************************************/
-/*                                                              */            
+/*                                                              */
 /* Function name: CarletGrayMap                                 */
-/* Parameters:  p, T                                            */          
+/* Parameters:  p, T                                            */
 /* Function description: Given a prime p and a sequence T=[t1,  */
 /*   ...,ts] of s nonnegative integers, return a map from       */
 /*   the Zp^s-submodule of Z/p^s^(t1+...+ts) isomorphic to      */
@@ -611,19 +611,19 @@ end function;
 /****************************************************************/
 intrinsic CarletGrayMap(p::RngIntElt, T::SeqEnum[RngIntElt]) -> Map
 {
-Given a prime p and a sequence T=[t1,...,ts] of s nonnegative integers, this 
-function returns a map from the (Z/p^s)-submodule of (Z/p^s)^(t1+...+ts) 
-isomorphic to (Z/p^s)^t1 x ... x Zp^ts to the space Zp^k, where k=t1*p^(s-1) 
-+ t2*p^(s-2) + ... + ts. In the first t1 coordinates, Carlet's generalized 
+Given a prime p and a sequence T=[t1,...,ts] of s nonnegative integers, this
+function returns a map from the (Z/p^s)-submodule of (Z/p^s)^(t1+...+ts)
+isomorphic to (Z/p^s)^t1 x ... x Zp^ts to the space Zp^k, where k=t1*p^(s-1)
++ t2*p^(s-2) + ... + ts. In the first t1 coordinates, Carlet's generalized
 Gray map phi_s from Z/p^s to Zp^(p^(s-1)) is considered; in the next t2,
-Carlet's generalized Gray map phi_(s-1) from Z/p^(s-1) to Zp^(p^(s-2)); and 
-so on, until the last ts coordinates, where the identity map phi_1 form Zp to 
-Zp is considered. The map is also provided with an inverse function, since 
+Carlet's generalized Gray map phi_(s-1) from Z/p^(s-1) to Zp^(p^(s-2)); and
+so on, until the last ts coordinates, where the identity map phi_1 form Zp to
+Zp is considered. The map is also provided with an inverse function, since
 it is bijective.
 
 Note that this map coincides with Carlet's generalized Gray map from the
 information space of a linear code C over Z/p^s of type (n; t1,...,ts)
-(as a Z/p^s-submodule) to the information space of phi_s(C). 
+(as a Z/p^s-submodule) to the information space of phi_s(C).
 }
     require IsPrime(p) : "Argument 1 must be a prime number";
     require not(IsEmpty(T)): "Argument 2 can not be an empty sequence";
@@ -641,14 +641,14 @@ information space of a linear code C over Z/p^s of type (n; t1,...,ts)
     diagonal := [p^(i-1) : j in [1..T[i]], i in [1..s]];
     R := RSpace(LinearCode(DiagonalMatrix(Zps, diagonal)));
     V := VectorSpace(GF(p), &+[T[i]*(s-i+1) : i in [1..#T]]);
-    return map< R -> V | r :-> V!ZpsPhiInfo(DivideByP(r, p, T), T), 
+    return map< R -> V | r :-> V!ZpsPhiInfo(DivideByP(r, p, T), T),
                          v :-> R!MultiplyByP(ZpsPhiInverseInfo(v, T), p, T) >;
-    
+
 end intrinsic;
 
 /****************************************************************/
 /*                                                              */
-/* Function name: OTimesProduct                                 */ 
+/* Function name: OTimesProduct                                 */
 /* Parameters: p, u, v                                          */
 /* Function description: Given two elements of Z/p^s, u and v,  */
 /*   this function returns the element of Z/p^s with p-ary      */
@@ -667,7 +667,7 @@ OTimesProduct := function(p, u, v)
     Zp := Integers(p);
     uExpansion := ParyExpansion(u);
     vExpansion := ParyExpansion(v);
-    
+
     wExpansion := [Integers()!uExpansion[i] + Integers()!vExpansion[i] ge p
                    select Zp!1 else Zp!0 : i in [1..#uExpansion]];
 
@@ -676,7 +676,7 @@ end function;
 
 /****************************************************************/
 /*                                                              */
-/* Function name: OTimesVectorProduct                           */ 
+/* Function name: OTimesVectorProduct                           */
 /* Parameters: p, u, v                                          */
 /* Function description: Given a prime and two vectors of the   */
 /*   same dimension over Z/p^s, apply OTimesProduct             */
@@ -714,36 +714,36 @@ end function;
 /*                                                              */
 /* Signature: (<CodeLinRng> C) -> BoolElt, CodeLinRng, Map      */
 /*                                                              */
-/****************************************************************/ 
-intrinsic HasLinearCarletGrayMapImage(C::CodeLinRng : AlgMethod := "StarProduct") 
+/****************************************************************/
+intrinsic HasLinearCarletGrayMapImage(C::CodeLinRng : AlgMethod := "StarProduct")
                                                     -> BoolElt, CodeLinRng, Map
 {
-Given a linear code C over Z/p^s of length n, this function returns true if 
-and only if the image of C under Carlet's generalized Gray map is a linear code  
-over Zp. If so, the function also returns the image C_p as a linear code over Zp, 
+Given a linear code C over Z/p^s of length n, this function returns true if
+and only if the image of C under Carlet's generalized Gray map is a linear code
+over Zp. If so, the function also returns the image C_p as a linear code over Zp,
 together with the bijection phi_s: C -> C_p.
 
-The user can specify the method to be used by setting the parameter AlgMethod to 
-"BruteForce", "StarProduct" or "StarProductMemory". The first one is based on 
-computing the span of the Gray map image of C, and the other two on Theorem 4.13 
-given in the below reference, without considering some of the codewords of order p. 
-"StarProductMemory" method does more computations than "StarProduct", but it 
-does not need to store any set of codewords. By default, AlgMethod is set to 
-"StarProduct". However, sometimes the brute force method can be faster, for 
+The user can specify the method to be used by setting the parameter AlgMethod to
+"BruteForce", "StarProduct" or "StarProductMemory". The first one is based on
+computing the span of the Gray map image of C, and the other two on Theorem 4.13
+given in the below reference, without considering some of the codewords of order p.
+"StarProductMemory" method does more computations than "StarProduct", but it
+does not need to store any set of codewords. By default, AlgMethod is set to
+"StarProduct". However, sometimes the brute force method can be faster, for
 example, when the image of C under Carlet’s Gray map gives a linear code over
 Fp, that is, when almost all pairs of codewords need to be checked in the
-default method. In cases where there is not enough memory to perform the default 
-method, the option "StarProductMemory" can be used. 
+default method. In cases where there is not enough memory to perform the default
+method, the option "StarProductMemory" can be used.
 
 If the linear code C is over Z4, HasLinearCarletGrayMapImage(C) coincides with
 function HasLinearGrayMapImage(C), which works only for linear codes over Z4.
 
-Reference: Tapia-Recillas, H., Vega, G.: On Z2k-linear and quaternary codes. 
+Reference: Tapia-Recillas, H., Vega, G.: On Z2k-linear and quaternary codes.
 SIAM J. Discrete Math. 17(1), pp. 103–113, 2003.
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>0";
-    require Type(AlgMethod) eq MonStgElt: 
+    require Type(AlgMethod) eq MonStgElt:
                          "The optional parameter AlgMethod must be a string";
 
     // if s=1, the Gray map image coincides with C, so it is linear
@@ -765,21 +765,21 @@ SIAM J. Discrete Math. 17(1), pp. 103–113, 2003.
                 mapGray := CarletGrayMap(C);
                 bijection := map<C -> Cp  | v :-> mapGray(v), w :-> w @@ mapGray >;
                 return true, Cp, bijection;
-            else 
+            else
                 return false, 0, 0;
             end if;
 
-        // New version StarProduct, which represents an alternative method when there 
+        // New version StarProduct, which represents an alternative method when there
         // is a "failed memory request" while using the default version "StarProduct"
         when "StarProductMemory" :
             G := ZpMinRowsGeneratorMatrix(C);
             type := ZpType(C);
             Gs := RowSubmatrix(G, &+type-type[s]);
             Cs := LinearCode(Gs);
-            for c1 in Cs do 
+            for c1 in Cs do
                 for c2 in Cs do
-                    if not p*OTimesVectorProduct(p, c1, c2) in C 
-                        then return false, 0, 0; 
+                    if not p*OTimesVectorProduct(p, c1, c2) in C
+                        then return false, 0, 0;
                     end if;
                 end for;
             end for;
@@ -790,21 +790,21 @@ SIAM J. Discrete Math. 17(1), pp. 103–113, 2003.
             return true, Cp, bijection;
 
         // Default version "StarProduct"
-        // It seems to be more suitable when the Gray map image is nonlinear 
-        else :  
+        // It seems to be more suitable when the Gray map image is nonlinear
+        else :
             G := ZpMinRowsGeneratorMatrix(C);
             type := ZpType(C);
             Gs := RowSubmatrix(G, &+type-type[s]);
             Cs := LinearCode(Gs);
             codewords := Setseq(Set(Cs));
-            for i in [1..#codewords] do 
+            for i in [1..#codewords] do
                 for j in [i..#codewords] do
-                    if not p*OTimesVectorProduct(p, codewords[i], codewords[j]) in C 
-                        then return false, 0, 0; 
+                    if not p*OTimesVectorProduct(p, codewords[i], codewords[j]) in C
+                        then return false, 0, 0;
                     end if;
                 end for;
             end for;
-            
+
             Cp := LinearCode<GF(p), np | CarletGrayMapImage(C)>;
             mapGray := CarletGrayMap(C);
             bijection := map<C -> Cp  | v :-> mapGray(v), w :-> w @@ mapGray >;
@@ -839,15 +839,15 @@ BinaryMatrixToOrdinaryMatrix := function(M)
     Mordinary := Matrix(Integers(), n, n, []);
     for i in [1..n] do
         for j in [1..n] do
-            if M[i][j] eq 1 then 
+            if M[i][j] eq 1 then
                 Mordinary[i][j] := -1;
-            else 
-                Mordinary[i][j] := 1; 
-            end if; 
+            else
+                Mordinary[i][j] := 1;
+            end if;
         end for;
-    end for; 
-    
-    return Mordinary;   
+    end for;
+
+    return Mordinary;
 end function;
 
 /****************************************************************/
@@ -855,7 +855,7 @@ end function;
 /* Function name: OrdinaryMatrixToBinaryMatrix                  */
 /* Parameters: M                                                */
 /* Function description: Given a matrix M of 1's and -1's of    */
-/*   order n, return the matrix resulting from swapping 1's     */ 
+/*   order n, return the matrix resulting from swapping 1's     */
 /*   for 0's and -1's for 1's.                                  */
 /* Input parameters description:                                */
 /*   - M: A matrix of 1's and -1's                              */
@@ -870,17 +870,17 @@ OrdinaryMatrixToBinaryMatrix := function(M)
     Mbinary := Matrix(GF(2), n, n, []);
     for i in [1..n] do
         for j in [1..n] do
-            if M[i][j] eq -1 then 
+            if M[i][j] eq -1 then
                 Mbinary[i][j] := 1;
             elif M[i][j] eq 1 then
-                Mbinary[i][j] := 0; 
-            else 
+                Mbinary[i][j] := 0;
+            else
                 return M, false;
-            end if; 
+            end if;
         end for;
-    end for; 
-    
-    return Mbinary, true;  
+    end for;
+
+    return Mbinary, true;
 end function;
 
 /****************************************************************/
@@ -903,30 +903,30 @@ end function;
 /****************************************************************/
 intrinsic IsHadamardMatrix(H::AlgMatElt) -> BoolElt
 {
-Returns true if and only if H is a generalized Hadamard matrix over Fq or an 
-ordinary Hadamard matrix of +1's and -1's. If H is an ordinary Hadamard matrix, 
+Returns true if and only if H is a generalized Hadamard matrix over Fq or an
+ordinary Hadamard matrix of +1's and -1's. If H is an ordinary Hadamard matrix,
 the return is the same as that of function IsHadamard(H).
 }
     F := BaseRing(H);
-     
+
     // if H is over Z, it is checked whether H is an ordinary matrix
     if Type(F) eq RngInt then
         return IsHadamard(H), H;
-        
-    // if H is over a finite field or Zp with p prime, it is checked 
+
+    // if H is over a finite field or Zp with p prime, it is checked
     // whether H is a generalized Hadamard matrix over this field or ring
-    elif (Type(F) eq FldFin) or ((Type(F) eq RngIntRes) and IsPrime(#F)) then   
+    elif (Type(F) eq FldFin) or ((Type(F) eq RngIntRes) and IsPrime(#F)) then
         if (#F eq 2) then
             Hordinary := BinaryMatrixToOrdinaryMatrix(H);
             return IsHadamard(Hordinary), Hordinary;
-            
+
         else
             n := Nrows(H);
             q := #F;
             if IsDivisibleBy(n, q) then
                 L := n/q;
                 elementsF := [s : s in F];
-            
+
                 for i in [1..n] do
                     for j in [(i+1)..n] do
                         multiplicityF := [0^^q];
@@ -938,24 +938,24 @@ the return is the same as that of function IsHadamard(H).
                             if not multiplicityF[k] eq L then
                                 return false, H;
                             end if;
-                        end for;     
+                        end for;
                     end for;
-                end for; 
-            
+                end for;
+
                 return true, H;
             else
                 return false, H;
-            end if;            
-        end if;  
-           
+            end if;
+        end if;
+
     else
         return false, H;
     end if;
-    
+
 end intrinsic;
 
 /****************************************************************/
-/* DELETE, Replaced by HadamardPhiZp_params                     */ 
+/* DELETE, Replaced by HadamardPhiZp_params                     */
 /****************************************************************/
 /*                                                              */
 /* Function name: HadamardPhiZp                                 */
@@ -968,7 +968,7 @@ end intrinsic;
 /*        in the first row                                      */
 /* Output parameters description:                               */
 /*   - A vector over GF(p) as the image of u under Phi          */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /****************************************************************/
@@ -1000,7 +1000,7 @@ end function;
 /*   - V : the vector space over GF(p) of dimension Ncols(H)    */
 /* Output parameters description:                               */
 /*   - A vector over Zp as the image of u under Phi             */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /****************************************************************/
@@ -1014,7 +1014,7 @@ HadamardPhiZp_params := function(u, H, p, s, V)
 end function;
 
 /****************************************************************/
-/* DELETE, Replaced by HadamardPhiZp_params                     */ 
+/* DELETE, Replaced by HadamardPhiZp_params                     */
 /****************************************************************/
 /*                                                              */
 /* Function name: HadamardPhiZpInverse                          */
@@ -1027,7 +1027,7 @@ end function;
 /*        in the first row                                      */
 /* Output parameters description:                               */
 /*   - An element of Z/p^s                                      */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /****************************************************************/
@@ -1039,7 +1039,7 @@ HadamardPhiZpInverse := function(uPary, H)
 
     lambda := uPary[1];
     pos := Position(Rows(H), uPary - V![lambda^^nparyCoordinate]) - 1;
-    
+
     return pos + (Integers()!lambda)*nparyCoordinate;
 end function;
 
@@ -1058,7 +1058,7 @@ end function;
 /*   - V : the vector space over GF(p) of dimension Ncols(H)    */
 /* Output parameters description:                               */
 /*   - An element of Z/p^s                                      */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /****************************************************************/
@@ -1066,7 +1066,7 @@ HadamardPhiZpInverse_params := function(uPary, H, p, s, V)
     nparyCoordinate := Ncols(H);
     lambda := uPary[1];
     pos := Position(Rows(H), uPary - V![lambda^^nparyCoordinate]) - 1;
-    
+
     return pos + (Integers()!lambda)*nparyCoordinate;
 end function;
 
@@ -1084,7 +1084,7 @@ end function;
 /*        in the first row                                      */
 /* Output parameters description:                               */
 /*   - The generalized Gray map given by H                      */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /* Signature: (<AlgMatElt> H) -> Map                            */
@@ -1093,27 +1093,27 @@ end function;
 intrinsic GrayMap(H::AlgMatElt) -> Map
 {
 Given a generalized Hadamard matrix H over GF(p) of length p^(s-1), for an integer
-s > 1, this function returns the generalized Gray map phi_s from Z/p^s to 
-GF(p)^(p^(s-1)) given by H. The matrix must have zeros in the first row, 
-but it does not need to be normalized. Matrix H can also be given as an ordinary 
-Hadamard matrix with 1's and -1's. In this case, it is transformed into a binary 
+s > 1, this function returns the generalized Gray map phi_s from Z/p^s to
+GF(p)^(p^(s-1)) given by H. The matrix must have zeros in the first row,
+but it does not need to be normalized. Matrix H can also be given as an ordinary
+Hadamard matrix with 1's and -1's. In this case, it is transformed into a binary
 matrix by swapping 1's for 0's and -1's for 1's.
 
-Note that if H is the Sylvester Hadamard matrix, which is the matrix generated 
-by all linear combinations of the rows of a matrix Y_(s-1) of size (s-1) x p^(s-1) 
-whose columns are all the vectors in GF(p)^(s-1), then this map coincides with 
+Note that if H is the Sylvester Hadamard matrix, which is the matrix generated
+by all linear combinations of the rows of a matrix Y_(s-1) of size (s-1) x p^(s-1)
+whose columns are all the vectors in GF(p)^(s-1), then this map coincides with
 the one given by function GrayMap(p, s).
 }
     if Type(BaseRing(H)) eq RngInt then
         require IsHadamard(H): "Argument 1 must be a Hadamard matrix";
         H := OrdinaryMatrixToBinaryMatrix(H);
-    else 
-        require Type(BaseRing(H)) eq FldFin and IsPrime(#BaseRing(H)): 
+    else
+        require Type(BaseRing(H)) eq FldFin and IsPrime(#BaseRing(H)):
                                      "Argument 1 must be a matrix over GF(p)";
         require IsHadamardMatrix(H): "Argument 1 must be a Hadamard matrix";
     end if;
     require Eltseq(H[1]) eq [0^^Ncols(H)]: "Argument 1 must have zeros in the first row";
-    require Eltseq(Transpose(H)[1]) eq [0^^Ncols(H)]: 
+    require Eltseq(Transpose(H)[1]) eq [0^^Ncols(H)]:
                                         "Argument 1 must have zeros in the first column";
 
     nparyCoordinate := Ncols(H);
@@ -1122,13 +1122,13 @@ the one given by function GrayMap(p, s).
     Zps := Integers(p^s);
     V := VectorSpace(GF(p), nparyCoordinate);
 
-    return map< Zps -> V | x :-> HadamardPhiZp_params(x, H, p, s, V), 
+    return map< Zps -> V | x :-> HadamardPhiZp_params(x, H, p, s, V),
                            y :-> Zps!HadamardPhiZpInverse_params(y, H, p, s, V) >;
 
 end intrinsic;
 
 /****************************************************************/
-/* DELETE, Replaced by HadamardPhiZp_params                     */ 
+/* DELETE, Replaced by HadamardPhiZp_params                     */
 /****************************************************************/
 /*                                                              */
 /* Function name: HadamardPhiZpCodeword                         */
@@ -1142,7 +1142,7 @@ end intrinsic;
 /*   compute the Gray map                                       */
 /* Output parameters description:                               */
 /*   - A vector over GF(p) of length (p^(s-1))n                 */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /****************************************************************/
@@ -1173,7 +1173,7 @@ HadamardPhiZpCodeword_params := function(c, H, p, s, V)
 end function;
 
 /****************************************************************/
-/* DELETE, Replaced by HadamardPhiZp_params                     */ 
+/* DELETE, Replaced by HadamardPhiZp_params                     */
 /****************************************************************/
 /*                                                              */
 /* Function name: HadamardPhiZpInverseCodeword                  */
@@ -1191,7 +1191,7 @@ end function;
 /*   - V: vector space over GF(p) of length nparyCoordinate     */
 /* Output parameters description:                               */
 /*   - A vector of (Z/p^s)^n (codeword)                         */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /****************************************************************/
@@ -1243,7 +1243,7 @@ end function;
 /*         the Gray map                                         */
 /* Output parameters description:                               */
 /*   - The Gray map from C to Zp^(n*p^(s-1))                    */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /* Signature: (<CodeLinRng> C, <AlgMatElt> H) -> Map            */
@@ -1251,32 +1251,32 @@ end function;
 /****************************************************************/
 intrinsic GrayMap(C::CodeLinRng, H::AlgMatElt) -> Map
 {
-Given a linear code C over Z/p^s of length n and a generalized Hadamard matrix 
-H over GF(p) of order p^(s-1), for an integer s>1, this function returns the 
-generalized Gray map Phi_s from C to GF(p)^(n*p^(s-1)) given by H applied to 
-each coordinate. The matrix must have zeros in the first row, but it does not 
-need to be normalized. Matrix H can also be given as an ordinary Hadamard matrix 
-with 1's and -1's. In this case, it is transformed into a binary matrix by 
+Given a linear code C over Z/p^s of length n and a generalized Hadamard matrix
+H over GF(p) of order p^(s-1), for an integer s>1, this function returns the
+generalized Gray map Phi_s from C to GF(p)^(n*p^(s-1)) given by H applied to
+each coordinate. The matrix must have zeros in the first row, but it does not
+need to be normalized. Matrix H can also be given as an ordinary Hadamard matrix
+with 1's and -1's. In this case, it is transformed into a binary matrix by
 swapping 1's for 0's and -1's for 1's.
 
-Note that if H is the Sylvester Hadamard matrix, which is the matrix generated 
-by all linear combinations of the rows of a matrix Y_(s-1) of size (s-1) x p^(s-1) 
-whose columns are all the vectors in GF(p)^(s-1), then this map coincides with 
+Note that if H is the Sylvester Hadamard matrix, which is the matrix generated
+by all linear combinations of the rows of a matrix Y_(s-1) of size (s-1) x p^(s-1)
+whose columns are all the vectors in GF(p)^(s-1), then this map coincides with
 the one given by function GrayMap(C).
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     if Type(BaseRing(H)) eq RngInt then
         require IsHadamard(H): "Argument 1 must be a Hadamard matrix";
         H := OrdinaryMatrixToBinaryMatrix(H);
-    else 
-        require Type(BaseRing(H)) eq FldFin and IsPrime(#BaseRing(H)): 
+    else
+        require Type(BaseRing(H)) eq FldFin and IsPrime(#BaseRing(H)):
                                      "Argument 1 must be a matrix over GF(p)";
         require IsHadamardMatrix(H): "Argument 1 must be a Hadamard matrix";
     end if;
     require Eltseq(H[1]) eq [0^^Ncols(H)]: "Argument 1 must have zeros in the first row";
-    require Eltseq(Transpose(H)[1]) eq [0^^Ncols(H)]: 
+    require Eltseq(Transpose(H)[1]) eq [0^^Ncols(H)]:
                                         "Argument 1 must have zeros in the first column";
 
     n := Length(C);
@@ -1284,9 +1284,9 @@ the one given by function GrayMap(C).
     V := VectorSpace(GF(p), nparyCoordinate);
     Vn := VectorSpace(GF(p), n*nparyCoordinate);
 
-    return map< C -> Vn | c :-> Vn!HadamardPhiZpCodeword_params(c, H, p, s, V), 
+    return map< C -> Vn | c :-> Vn!HadamardPhiZpCodeword_params(c, H, p, s, V),
                           y :-> C!HadamardPhiZpInverseCodeword_params(y, H, n, p, s, V) >;
-                        
+
 end intrinsic;
 
 /****************************************************************/
@@ -1308,7 +1308,7 @@ end intrinsic;
 /*         the Gray map                                         */
 /* Output parameters description:                               */
 /*   - A sequence of vectors of GF(p)^(n*p^(s-1))               */
-/*                                                              */ 
+/*                                                              */
 /* Function developed by Javier Esmoris                         */
 /*                                                              */
 /* Signature: (<CodeLinRng> C, <AlgMatElt> H) -> [ModTupFldElt] */
@@ -1316,19 +1316,19 @@ end intrinsic;
 /****************************************************************/
 intrinsic GrayMapImage(C::CodeLinRng, H::AlgMatElt) -> SeqEnum
 {
-Given a linear code C over Z/p^s of length n and a generalized Hadamard matrix 
-H over GF(p) of order p^(s-1), for an integer s>1, this function returns the 
-image of C under the generalized Gray map Phi_s from C to GF(p)^(n*p^(s-1)) 
-given by H applied to each coordinate. As the resulting image may not be a 
-linear code over GF(p), a sequence of vectors in GF(p)^(n*p^(s-1)) is returned 
-rather than a code. The matrix must have zeros in the first row, but it does 
-not need to be normalized. Matrix H can also be given as an ordinary Hadamard 
-matrix with 1's and -1's. In this case, it is transformed into a binary matrix 
+Given a linear code C over Z/p^s of length n and a generalized Hadamard matrix
+H over GF(p) of order p^(s-1), for an integer s>1, this function returns the
+image of C under the generalized Gray map Phi_s from C to GF(p)^(n*p^(s-1))
+given by H applied to each coordinate. As the resulting image may not be a
+linear code over GF(p), a sequence of vectors in GF(p)^(n*p^(s-1)) is returned
+rather than a code. The matrix must have zeros in the first row, but it does
+not need to be normalized. Matrix H can also be given as an ordinary Hadamard
+matrix with 1's and -1's. In this case, it is transformed into a binary matrix
 by swapping 1's for 0's and -1's for 1's.
 
-Note that if H is the Sylvester Hadamard matrix, which is the matrix generated 
-by all linear combinations of the rows of a matrix Y_(s-1) of size (s-1) x p^(s-1) 
-whose columns are all the vectors in GF(p)^(s-1), then this map coincides with 
+Note that if H is the Sylvester Hadamard matrix, which is the matrix generated
+by all linear combinations of the rows of a matrix Y_(s-1) of size (s-1) x p^(s-1)
+whose columns are all the vectors in GF(p)^(s-1), then this map coincides with
 the one given by function GrayMapImage(C).
 }
     mapGray := GrayMap(C, H);
@@ -1362,32 +1362,32 @@ end intrinsic;
 /* Signature: (<CodeLinRng> C, <AlgMatElt> H)                   */
 /*                             -> BoolElt, CodeLinRng, Map      */
 /*                                                              */
-/****************************************************************/ 
-intrinsic HasLinearGrayMapImage(C::CodeLinRng, H::AlgMatElt) 
+/****************************************************************/
+intrinsic HasLinearGrayMapImage(C::CodeLinRng, H::AlgMatElt)
                                                      -> BoolElt, CodeLinRng, Map
 {
 Given a linear code C over Z/p^s of length n and a generalized Hadamard matrix
-over GF(p) of order p^(s-1), for an integer s>1, this function returns true if 
-and only if the image of C under the generalized Gray map Phi_s from C to 
-GF(p)^(n*p^(s-1)) given by H applied to each coordinate, is a linear code  
-over GF(p). If so, the function also returns the image C_p as a linear code over 
-GF(p), together with the bijection Phi_s: C -> C_p. Matrix H can also be given 
-as an ordinary Hadamard matrix with 1's and -1's. In this case, it is transformed 
+over GF(p) of order p^(s-1), for an integer s>1, this function returns true if
+and only if the image of C under the generalized Gray map Phi_s from C to
+GF(p)^(n*p^(s-1)) given by H applied to each coordinate, is a linear code
+over GF(p). If so, the function also returns the image C_p as a linear code over
+GF(p), together with the bijection Phi_s: C -> C_p. Matrix H can also be given
+as an ordinary Hadamard matrix with 1's and -1's. In this case, it is transformed
 into a binary matrix by swapping 1's for 0's and -1's for 1's.
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
         if Type(BaseRing(H)) eq RngInt then
         require IsHadamard(H): "Argument 1 must be a Hadamard matrix";
         H := OrdinaryMatrixToBinaryMatrix(H);
-    else 
-        require Type(BaseRing(H)) eq FldFin and IsPrime(#BaseRing(H)): 
+    else
+        require Type(BaseRing(H)) eq FldFin and IsPrime(#BaseRing(H)):
                                      "Argument 1 must be a matrix over GF(p)";
         require IsHadamardMatrix(H): "Argument 1 must be a Hadamard matrix";
     end if;
     require Eltseq(H[1]) eq [0^^Ncols(H)]: "Argument 1 must have zeros in the first row";
-    require Eltseq(Transpose(H)[1]) eq [0^^Ncols(H)]: 
+    require Eltseq(Transpose(H)[1]) eq [0^^Ncols(H)]:
                                         "Argument 1 must have zeros in the first column";
 
     np := Length(C)*Ncols(H);
@@ -1401,7 +1401,7 @@ into a binary matrix by swapping 1's for 0's and -1's for 1's.
         mapGray := GrayMap(C, H);
         bijection := map<C -> Cp  | v :-> mapGray(v), w :-> w @@ mapGray >;
         return true, Cp, bijection;
-    else 
+    else
         return false, 0, 0;
     end if;
 
@@ -1422,40 +1422,40 @@ end intrinsic;
 /*   corresponding isomorphism from C onto S. It also returns the generator   */
 /*   matrix in standard form used to generate the code S and the permutation  */
 /*   x such that C^x = S. Magma returns one of the many codes in standard     */
-/*   form which is isomorphic to C (the same code is returned each time).     */  
+/*   form which is isomorphic to C (the same code is returned each time).     */
 /* Input parameters description:                                              */
 /*   - C : A linear code over Z/p^s                                           */
 /* Output parameters description:                                             */
 /*   - A permutation-equivalent code S in standard form                       */
 /*   - A map from C to S                                                      */
 /*   - A generator matrix in standard form                                    */
-/*   - A permutation transforming C into S                                    */ 
-/*                                                                            */ 
+/*   - A permutation transforming C into S                                    */
+/*                                                                            */
 /* Function developed by Noam von Rotberg                                     */
 /*                                                                            */
 /* Signature: (<CodeLinRng> C) -> CodeLinRng, Map, ModMatRngElt, GrpPermElt   */
 /*                                                                            */
-/******************************************************************************/ 
-intrinsic ZpStandardForm(C::CodeLinRng : IsReducedStandardForm := false) 
+/******************************************************************************/
+intrinsic ZpStandardForm(C::CodeLinRng : IsReducedStandardForm := false)
                             -> CodeLinRng, Map, ModMatRngElt, GrpPermElt
 {
 Given a linear code C over Z/p^s, return a permutation-equivalent code S in
 standard form, together with the corresponding isomorphism from C onto
-S. It also returns the generator matrix in standard form used to generate 
-the code S and the permutation x such that C^x = S. Magma returns one of 
-the many codes in standard form which is isomorphic to C (the same code 
-is returned each time). 
+S. It also returns the generator matrix in standard form used to generate
+the code S and the permutation x such that C^x = S. Magma returns one of
+the many codes in standard form which is isomorphic to C (the same code
+is returned each time).
 
-The parameter IsReducedStandardForm specifies whether the generator matrix 
-is given as a matrix in reduced standard form. The default value is false. 
-If it is set to true, the function returns a generator matrix which is in 
-reduced standard form. 
+The parameter IsReducedStandardForm specifies whether the generator matrix
+is given as a matrix in reduced standard form. The default value is false.
+If it is set to true, the function returns a generator matrix which is in
+reduced standard form.
 
 If C is a linear code over Z4, the first two output parameters coincide with
-the ones given by the function StandardForm(C), and the last two parameters 
+the ones given by the function StandardForm(C), and the last two parameters
 with the first and forth ones given by StandardFormInfo(C).
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     Gs, _, _, perm := StandardFormInfo(C);
@@ -1485,51 +1485,51 @@ end intrinsic;
 /*   - IsInStandardFormMatrix : a Boolean                                     */
 /* Output parameters description:                                             */
 /*   - true if and only if G is in standard form                              */
-/*                                                                            */ 
+/*                                                                            */
 /* Function developed by Noam von Rotberg                                     */
-/*                                                                            */ 
+/*                                                                            */
 /* Signature: (<Mtrx> G) -> BoolElt                                           */
 /*                                                                            */
-/******************************************************************************/ 
+/******************************************************************************/
 intrinsic IsStandardFormMatrix(G::Mtrx : IsReducedStandardForm := false) -> BoolElt
 {
 Given a matrix G over Z/p^s, return true if and only if G is a generator matrix
-in standard form. 
+in standard form.
 
-The parameter IsReducedStandardForm is set to false by default. If it is set to 
-true, the function returns true if and only if G is in reduced standard form.   
+The parameter IsReducedStandardForm is set to false by default. If it is set to
+true, the function returns true if and only if G is in reduced standard form.
 }
-    isOverZps, p, s := IsMatrixOverZps(G); 
-    require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";    
+    isOverZps, p, s := IsMatrixOverZps(G);
+    require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     n := NumberOfColumns(G);
     k := NumberOfRows(G);
     if not (n ge k) or (n eq 0) then
-        return false; 
-    end if; 
+        return false;
+    end if;
 
     type := [ Multiplicity( Diagonal(G), p^i ) : i in [0..(s-1)] ];
     if not k eq &+type then
-        return false; 
+        return false;
     end if;
 
     if not IsUpperTriangular(G) then
-        return false; 
+        return false;
     end if;
 
     Zps := BaseRing(G);
     for i in [1..s] do
         sum := (i eq 1) select 0 else (&+[type[j] : j in [1..i-1]]);
-        
+
         identityMatrix := ExtractBlock(G, sum+1, sum+1, type[i], type[i]);
         if not identityMatrix eq p^(i-1)*IdentityMatrix(Zps, type[i]) then
-            return false; 
+            return false;
         end if;
 
-        randomMatrix := ExtractBlock(G, sum+1, sum + type[i] +1, type[i], 
-                                                        n - sum - type[i]); 
+        randomMatrix := ExtractBlock(G, sum+1, sum + type[i] +1, type[i],
+                                                        n - sum - type[i]);
         if not IsZero(p^(s-i+1)*randomMatrix) then
-            return false; 
+            return false;
         end if;
     end for;
 
@@ -1577,31 +1577,31 @@ ZpTypeSequence := func<G, p, s | [ Multiplicity( Diagonal(G), p^i ) : i in [0..(
 /*   - A generator matrix with the minimum number of rows                     */
 /*   - A sequence containing the type of C: [t1,t2,...,ts]                    */
 /*   - A permutation transforming C into S                                    */
-/*                                                                            */ 
+/*                                                                            */
 /* Function updated by Adrián Torres                                          */
-/*                                                                            */ 
+/*                                                                            */
 /* Signature: (<CodLinRng> C) -> ModMatRngElt, SeqEnum, GrpPermElt            */
 /*                                                                            */
-/******************************************************************************/ 
+/******************************************************************************/
 intrinsic ZpMinRowsGeneratorMatrix(C::CodeLinRng) -> ModMatRngElt, SeqEnum, GrpPermElt
 {
-A generator matrix for the linear code C over Z/p^s of type (n; t1,...,ts), with the 
+A generator matrix for the linear code C over Z/p^s of type (n; t1,...,ts), with the
 minimum number of rows, that is with t1+...+ts rows: t1 rows of order p^s, t2 of order
-p^(s-1), and so on until ts rows of order p. It also returns the sequence [t1,...,ts] 
-and a permutation transforming C into a permutation-equivalent code with generator 
-matrix in standard form. 
+p^(s-1), and so on until ts rows of order p. It also returns the sequence [t1,...,ts]
+and a permutation transforming C into a permutation-equivalent code with generator
+matrix in standard form.
 
-If C is a linear code over Z4 of type (n; t1, t2), to obtain a generator matrix with 
-minimum number of rows, function MinRowsGeneratorMatrix(C) can also be used. However, 
-instead of returning the sequence [t1, t2], it returns t2, t1, and the generator matrix 
+If C is a linear code over Z4 of type (n; t1, t2), to obtain a generator matrix with
+minimum number of rows, function MinRowsGeneratorMatrix(C) can also be used. However,
+instead of returning the sequence [t1, t2], it returns t2, t1, and the generator matrix
 may be different.
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     Gs, _, _, perm := StandardFormInfo(C);
     Gmin := Gs^(perm^(-1));
-    
+
     return Gmin, ZpTypeSequence(Gs, p, s), perm;
 
 end intrinsic;
@@ -1632,9 +1632,9 @@ end intrinsic;
 /******************************************************************************/
 intrinsic ZpPseudoDimension(C::CodeLinRng) -> IntRngElt
 {
-Given a linear code C over Z/p^s of type (n; t1,..ts), return the value st_1+(s-1)t_2+... + t_s. 
-Note that |C|=p^(st_1+(s-1)t_2+\dots + t_s). Function PseudoDimension(C), for linear codes over 
-rings in general, return the number of generators of the linear code C, that is, t_1+t_2+...+t_s. 
+Given a linear code C over Z/p^s of type (n; t1,..ts), return the value st_1+(s-1)t_2+... + t_s.
+Note that |C|=p^(st_1+(s-1)t_2+\dots + t_s). Function PseudoDimension(C), for linear codes over
+rings in general, return the number of generators of the linear code C, that is, t_1+t_2+...+t_s.
 }
     isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 1): "The code C must be over Z/p^s with p prime and s>=1";
@@ -1649,7 +1649,7 @@ end intrinsic;
 /* Function name: ZpInformationRate                                           */
 /* Parameters: C                                                              */
 /* Function description: Given a linear code C over Z/p^ s of type (n; t1,..  */
-/*   ts), return the information rate of C, that is the ratio                 */ 
+/*   ts), return the information rate of C, that is the ratio                 */
 /*   (st1 + (s-1)t2 + ...+ ts) / (n*s).                                       */
 /* Input parameters description:                                              */
 /*   - C: A linear code over Z/p^s                                            */
@@ -1661,7 +1661,7 @@ end intrinsic;
 /******************************************************************************/
 intrinsic ZpInformationRate(C::CodeLinRng) -> FldRatElt
 {
-Given a linear code C over Z/p^s of type (n; t1,..ts), return the information rate of C, 
+Given a linear code C over Z/p^s of type (n; t1,..ts), return the information rate of C,
 that is the ratio (st1 + (s-1)t2 + ...+ ts) / (n*s).
 }
     isOverZps, p, s := IsLinearCodeOverZps(C);
@@ -1689,18 +1689,18 @@ end intrinsic;
 /*                                                                            */
 /* Signature: (<CodeLinRng> C) -> SeqEnum                                     */
 /*                                                                            */
-/******************************************************************************/ 
+/******************************************************************************/
 intrinsic ZpType(C::CodeLinRng) -> SeqEnum
 {
-Given a linear code C over Z/p^s of length n, return the type of the code, 
-that is, the unique sequence [t1,...,ts] such that the code, as a subgroup 
-of (Z/p^s)^n, is isomorphic to (Z/p^s)^t1 x (Z/p^(s-1))^t2 x ··· x Zp^ts.  
+Given a linear code C over Z/p^s of length n, return the type of the code,
+that is, the unique sequence [t1,...,ts] such that the code, as a subgroup
+of (Z/p^s)^n, is isomorphic to (Z/p^s)^t1 x (Z/p^(s-1))^t2 x ··· x Zp^ts.
 }
     isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     return ZpTypeSequence(StandardFormInfo(C), p, s);
-   
+
 end intrinsic;
 
 /******************************************************************************/
@@ -1723,8 +1723,8 @@ end intrinsic;
 forward ZpTypeDual;
 intrinsic ZpTypeDual(C::CodeLinRng) -> SeqEnum
 {
-Given a linear code C over Z/p^s of type (n; t1,...,ts), return the type of 
-the dual code of C, that is, the sequence [n-t1-t2-...-ts, ts, ..., t2].   
+Given a linear code C over Z/p^s of type (n; t1,...,ts), return the type of
+the dual code of C, that is, the sequence [n-t1-t2-...-ts, ts, ..., t2].
 }
     isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
@@ -1733,7 +1733,7 @@ the dual code of C, that is, the sequence [n-t1-t2-...-ts, ts, ..., t2].
     n := Length(C);
 
     return [n - &+type] cat Reverse(type[2..#type]);
-   
+
 end intrinsic;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1761,10 +1761,10 @@ end intrinsic;
 /* Function developed by Adrián Torres                          */
 /*                                                              */
 /****************************************************************/
-DivideMatrix := function(G, p, T) 
+DivideMatrix := function(G, p, T)
     n := Ncols(G);
     row := T[1]+1;
-    for t in [2..#T] do 
+    for t in [2..#T] do
         divisor := p^(t-1);
         for i in [1..T[t]] do
             for col in [1..n] do
@@ -1773,7 +1773,7 @@ DivideMatrix := function(G, p, T)
             row +:= 1;
         end for;
     end for;
-    
+
     return G;
 end function;
 
@@ -1785,7 +1785,7 @@ end function;
 /*   standard form, the prime number p, and the positive number */
 /*   s, the function returns a parity check matrix of the code  */
 /*   generated by Gs, which corresponds to the one described    */
-/*   in the given reference.                                    */    
+/*   in the given reference.                                    */
 /*                                                              */
 /* Input parameters description:                                */
 /*   - G : A matrix over Z/p^s                                  */
@@ -1859,16 +1859,16 @@ end function;
 /*******************************************************************************/
 intrinsic ZpDual(C::CodeLinRng) -> CodeLinRng
 {
-Given a linear code C over Z/p^s of type (n; t1,...,ts), return the dual code 
-D of C. The dual code consists of all codewords in the (Z/p^s)-space V=(Z/p^s)^n 
+Given a linear code C over Z/p^s of type (n; t1,...,ts), return the dual code
+D of C. The dual code consists of all codewords in the (Z/p^s)-space V=(Z/p^s)^n
 which are orthogonal to all codewords of C. In particular, the dual code D is of
-type (n; n-t1-t2-...-ts, ts, t_(s-1),..., t_2). 
+type (n; n-t1-t2-...-ts, ts, t_(s-1),..., t_2).
 
 This function creates the generator matrix of D using a specific known structure
 based on the generator matrix of C. This construction improves the computation
-time with respect to the generic function Dual(C) for codes over rings.  
+time with respect to the generic function Dual(C) for codes over rings.
 
-If C is over Z4, function ZpDual(C) coincides with function DualZ4(C), but the 
+If C is over Z4, function ZpDual(C) coincides with function DualZ4(C), but the
 former may perform less efficiently in general.
 }
 	isOverZps, p, s := IsLinearCodeOverZps(C);
@@ -1899,27 +1899,27 @@ end intrinsic;
 /*   - The dual of a permutation-equivalent code S in standard form           */
 /*   - A map from the dual of C to the dual of S                              */
 /*   - A parity check matrix of C                                             */
-/*   - A permutation transforming the dual of C into the dual of S            */ 
+/*   - A permutation transforming the dual of C into the dual of S            */
 /*                                                                            */
 /* Function developed by Merce Villanueva                                     */
 /*                                                                            */
 /* Signature: (<CodeLinRng> C) -> CodeLinRng, Map, ModMatRngElt, GrpPermElt   */
 /*                                                                            */
 /******************************************************************************/
-intrinsic ZpStandardFormDual(C::CodeLinRng) -> CodeLinRng, Map, ModMatRngElt, 
+intrinsic ZpStandardFormDual(C::CodeLinRng) -> CodeLinRng, Map, ModMatRngElt,
                                                GrpPermElt
 {
-Given a linear code C over Z/p^s, return the dual of a permutation-equivalent 
-code S in standard form, together with the corresponding isomorphism from the 
-dual of C onto the dual of S. It also returns the parity check matrix used to 
-generate the dual code of S and the permutation x such that (C^\perp)^x = S^\perp. 
-Magma returns one of the many codes which is isomorphic to C^\perp (the same 
-code is returned each time). 
+Given a linear code C over Z/p^s, return the dual of a permutation-equivalent
+code S in standard form, together with the corresponding isomorphism from the
+dual of C onto the dual of S. It also returns the parity check matrix used to
+generate the dual code of S and the permutation x such that (C^\perp)^x = S^\perp.
+Magma returns one of the many codes which is isomorphic to C^\perp (the same
+code is returned each time).
 
 If C is a linear code over Z4, the first two output parameters coincide with
 the ones given by the function StandardFormDual(C).
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     Gs, _, _, perm := StandardFormInfo(C);
@@ -1948,36 +1948,36 @@ end intrinsic;
 /*   - A parity check matrix with the minimum number of rows                  */
 /*   - A sequence containing the type of the dual of C                        */
 /*   - A permutation transforming the dual of C into the dual of S            */
-/*                                                                            */ 
+/*                                                                            */
 /* Function developed by Mercè Villanueva                                     */
-/*                                                                            */ 
+/*                                                                            */
 /* Signature: (<CodLinRng> C) -> ModMatRngElt, SeqEnum, GrpPermElt            */
 /*                                                                            */
-/******************************************************************************/ 
+/******************************************************************************/
 intrinsic ZpMinRowsParityCheckMatrix(C::CodeLinRng) -> ModMatRngElt, SeqEnum, GrpPermElt
 {
-A parity check matrix for the linear code C over Z/p^s of type (n; t1,...,ts), with the 
-minimum number of rows, that is, with n-t1 rows. It also returns the sequence 
-[n-t1-t2-...-ts, ts, ..., t2] and a permutation transforming C^\perp into a 
+A parity check matrix for the linear code C over Z/p^s of type (n; t1,...,ts), with the
+minimum number of rows, that is, with n-t1 rows. It also returns the sequence
+[n-t1-t2-...-ts, ts, ..., t2] and a permutation transforming C^\perp into a
 permutation-equivalent code with generator matrix in standard form.
 
-This function should be faster for most codes over Z/p^s than the general function 
-ParityCheckMatrix(C) for codes over finite rings. Another parity check matrix for the 
-code C can be obtained as the generator matrix of the dual of C with the minimum number 
-of rows, that is, as ZpMinRowsGeneratorMatrix(ZpDual(C)). 
+This function should be faster for most codes over Z/p^s than the general function
+ParityCheckMatrix(C) for codes over finite rings. Another parity check matrix for the
+code C can be obtained as the generator matrix of the dual of C with the minimum number
+of rows, that is, as ZpMinRowsGeneratorMatrix(ZpDual(C)).
 
-If C is a linear code over Z4 of type (n; t1, t2), then MinRowsParityCheckMatrix(C) 
-can also be used to obtain a parity check matrix with minimum number of rows. However, 
-only the matrix is returned, which may not coincide with the one given by 
+If C is a linear code over Z4 of type (n; t1, t2), then MinRowsParityCheckMatrix(C)
+can also be used to obtain a parity check matrix with minimum number of rows. However,
+only the matrix is returned, which may not coincide with the one given by
 ZpMinRowsGeneratorMatrix(C).
 }
-    isOverZps, p, s := IsLinearCodeOverZps(C); 
+    isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
 
     Gs, _, _, perm := StandardFormInfo(C);
     Hs := StandardFormParityCheckMatrix(Gs, p, s);
     Hmin := Hs^(perm^(-1));
-    
+
     return Hmin, ZpTypeDual(C), perm;
 
 end intrinsic;
@@ -1995,7 +1995,7 @@ end intrinsic;
 /* Function description: Given a linear code C over Z/p^s of length n, with    */
 /*   ambient space V = (Z/p^s)^n, return a set of coset representatives (not   */
 /*   necessarily of minimal weight in their cosets) for C in V as an indexed   */
-/*   set of vectors from V. The set of coset representatives {c_0, c_1,...,c_t}*/ 
+/*   set of vectors from V. The set of coset representatives {c_0, c_1,...,c_t}*/
 /*   satisfies that c_0 is the zero codeword and V = U_(i=0)^t (C + c_i).      */
 /*   Note that this function is only applicable when V and C are small.        */
 /* Input parameters description:                                               */
@@ -2011,24 +2011,24 @@ end intrinsic;
 /*******************************************************************************/
 intrinsic CosetRepresentatives(C::CodeLinRng) -> SetIndx
 {
-Given a linear code C over Z/p^s of length n, with ambient space V = (Z/p^s)^n, 
-return a set of coset representatives (not necessarily of minimal weight in their 
-cosets) for C in V as an indexed set of vectors from V. The set of coset 
-representatives [c_0, c_1,..., c_t] satisfies that c_0 is the zero codeword and 
-V = U_(i=0)^t (C + c_i). Note that this function is only applicable when V and 
+Given a linear code C over Z/p^s of length n, with ambient space V = (Z/p^s)^n,
+return a set of coset representatives (not necessarily of minimal weight in their
+cosets) for C in V as an indexed set of vectors from V. The set of coset
+representatives [c_0, c_1,..., c_t] satisfies that c_0 is the zero codeword and
+V = U_(i=0)^t (C + c_i). Note that this function is only applicable when V and
 C are small.
-}	
+}
 	isOverZps, p, s := IsLinearCodeOverZps(C);
     require isOverZps and (s ge 2): "The code C must be over Z/p^s with s>1";
-    
+
     Zps := Integers(p^s);
     U := UniverseCode(Zps, Length(C));
-    
+
     leadersSeq := [];
     if (#C eq 1) then
         leadersSeq := {@ x : x in U @};
     elif (#C eq #U) then
-        leadersSeq := {@ U!0 @};  
+        leadersSeq := {@ U!0 @};
     else
         Q, f := quo<RSpace(U)|RSpace(C)>;
         R := RSpace(Zps, Degree(Q));
@@ -2066,14 +2066,14 @@ end intrinsic;
 /*******************************************************************************/
 intrinsic CosetRepresentatives(C::CodeLinRng, S::CodeLinRng) -> SetIndx, SetIndx
 {
-Given a linear code C over Z/p^s of length n, and a subcode S over Z/p^s of C, 
-return a set of coset representatives (not necessarily of minimal weight in their 
-cosets) for S in C as an indexed set of codewords from C. The set of coset 
-representatives [c_0, c_1,..., c_t] satisfies that c_0 is the zero codeword and 
-C = U_(i=0)^t (S + c_i). The function also returns a second set containing the 
+Given a linear code C over Z/p^s of length n, and a subcode S over Z/p^s of C,
+return a set of coset representatives (not necessarily of minimal weight in their
+cosets) for S in C as an indexed set of codewords from C. The set of coset
+representatives [c_0, c_1,..., c_t] satisfies that c_0 is the zero codeword and
+C = U_(i=0)^t (S + c_i). The function also returns a second set containing the
 images of the coset representatives [c_0, c_1,..., c_t] by Carlet's generalized
 Gray map. Note that this function is only applicable when S and C are small.
-}	
+}
 	isOverZps, p, s := IsLinearCodeOverZps(C);
     isOverZpsS, _, _ := IsLinearCodeOverZps(S);
     require isOverZps and (s ge 2) : "Argument 1 must be a code over Zps with s>1";
@@ -2087,7 +2087,7 @@ Gray map. Note that this function is only applicable when S and C are small.
         R := RSpace(Integers(p^s), degreeQ);
         leadersZps := {@ (Q!x)@@f : x in R @};
         leadersGFp := {@ fp(v) : v in leadersZps @};
-    else 
+    else
         leadersZps := {@ C!0 @};
         leadersGFp := {@ fp(C!0) @};
     end if;
