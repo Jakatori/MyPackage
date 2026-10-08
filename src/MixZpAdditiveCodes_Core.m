@@ -2118,5 +2118,3 @@ Xi = [a_1+...+a_(i-1)+1,...,a_1+...+a_s] are multiplied by p^(s-1) for i in
     return Random(C`Code);
 
 end intrinsic;
-
-

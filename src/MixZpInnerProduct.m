@@ -26,4 +26,3 @@ intrinsic MixZpInnerProduct(u::ModTupRngElt, v::ModTupRngElt, lengthSeq::SeqEnum
     
     return sum;
 end intrinsic;
-
