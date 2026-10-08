@@ -1,13 +1,11 @@
-import "MixZpAdditiveCodes_Core.m": MixZpChangeMatrixZpstoZp;
+
 
 intrinsic IsSelfOrthogonal(C::MixZpCode) -> BoolElt
     {Returns true if the code C is self-orthogonal under MixZpInnerProduct.}
 
     G := GeneratorMatrix(C`Code);
     k := Nrows(G);
-    p := #C`BaseRing;
 
-    MixZpChangeMatrixZpstoZp(~G, p, C`LengthSeq);
 
     for i in [1..k] do
         for j in [i..k] do
