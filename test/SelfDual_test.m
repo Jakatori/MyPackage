@@ -103,3 +103,16 @@ else
 end if;
 
 print "Additional examples completed successfully!";
+
+// 4. Test a code that is neither self-orthogonal nor self-dual
+R4 := IntegerRing(4);
+lengthSeq4 := [0, 2];
+
+G3 := Matrix(R4, 1, 2, [1, 0]);
+C3 := LinearCode(G3);
+C3_mix := MixZpAdditiveCode(C3, 2, lengthSeq4);
+
+assert IsSelfOrthogonal(C3_mix) eq false;
+assert IsSelfDual(C3_mix) eq false;
+
+print "Test 4 passed: code is neither self-orthogonal nor self-dual.";

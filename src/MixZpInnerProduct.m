@@ -7,11 +7,21 @@ intrinsic MixZpInnerProduct(u::ModTupRngElt, v::ModTupRngElt, lengthSeq::SeqEnum
     
     R := BaseRing(Parent(u));
     sizeRing := #R;
-    
+
     p := PrimeFactors(sizeRing)[1];
     s := Valuation(sizeRing, p);
-    
-    require Degree(Parent(u)) eq &+lengthSeq: "Vector length does not match sum of lengthSeq.";
+
+    require #lengthSeq eq s:
+        "lengthSeq must contain one entry for each power of p.";
+
+    require Parent(u) eq Parent(v):
+        "Vectors must belong to the same parent.";
+
+    require &and[ell ge 0 : ell in lengthSeq]:
+        "Block lengths must be non-negative.";
+
+    require Degree(Parent(u)) eq &+lengthSeq:
+        "Vector length does not match sum of lengthSeq.";
     
     sum := R ! 0;
     col_idx := 1;
