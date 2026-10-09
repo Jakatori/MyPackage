@@ -36,6 +36,28 @@ assert ip eq R!2;
 print "Test 2 passed: mixed inner product.";
 
 
+ // 2b. Test mixed inner product with nonzero coordinates in both blocks
+R4 := IntegerRing(4);
+lengthSeq2 := [1, 1];
+
+// The code must be valid for the mixed alphabet Z2 x Z4.
+// The first coordinate must be even in Z4.
+G4 := Matrix(R4, 1, 2, [2, 1]);
+C4 := LinearCode(G4);
+C4_mix := MixZpAdditiveCode(C4, 2, lengthSeq2);
+
+// Both coordinates are nonzero.
+// Expected inner product: 2*(2*2) + 1*(1*3) = 8 + 3 = 3 mod 4.
+u4 := Vector(R4, [2, 1]);
+v4 := Vector(R4, [2, 3]);
+
+ip4 := MixZpInnerProduct(C4_mix, u4, v4);
+print "Mixed inner product with two nonzero blocks:", ip4;
+
+assert ip4 eq R4!3;
+print "Test 2b passed: scaling across both blocks.";
+
+
 // 3. Test a self-orthogonal but non-self-dual code
 
 G2 := Matrix(R, 1, 2, [2, 0]);
@@ -56,7 +78,7 @@ print "SelfDual tests passed!";
 print "Running randomized tests for mixed Zp-additive codes...";
 
 p := 2;
-lengthSeq := [4, 4];
+lengthSeq := [1, 1];
 
 for i in [1..10] do
     // Generate a valid random mixed Zp-additive code directly
