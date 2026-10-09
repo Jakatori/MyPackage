@@ -68,6 +68,42 @@ C2_mix := MixZpAdditiveCode(C2, 2, lengthSeq);
 assert IsSelfOrthogonal(C2_mix) eq true;
 assert IsSelfDual(C2_mix) eq false;
 
+
+/*
+Test 3b: Generator rows are individually self-orthogonal,
+but their mutual inner product is nonzero.
+*/
+R4 := IntegerRing(4);
+lengthSeq3 := [0, 4];
+
+G_cross := Matrix(R4, [
+    [1, 1, 1, 1],
+    [1, 1, 1, 3]
+]);
+
+C_cross := LinearCode(G_cross);
+C_cross_mix := MixZpAdditiveCode(C_cross, 2, lengthSeq3);
+
+// Each generator has zero inner product with itself.
+assert MixZpInnerProduct(
+    C_cross_mix, G_cross[1], G_cross[1]
+) eq R4!0;
+
+assert MixZpInnerProduct(
+    C_cross_mix, G_cross[2], G_cross[2]
+) eq R4!0;
+
+// Their mutual inner product is 2 modulo 4.
+assert MixZpInnerProduct(
+    C_cross_mix, G_cross[1], G_cross[2]
+) eq R4!2;
+
+// Therefore, the code is not self-orthogonal.
+assert IsSelfOrthogonal(C_cross_mix) eq false;
+assert IsSelfDual(C_cross_mix) eq false;
+
+print "Test 3b passed: mutual orthogonality is checked.";
+
 print "Test 3 passed: self-orthogonal but not self-dual.";
 
 print "SelfDual tests passed!";
