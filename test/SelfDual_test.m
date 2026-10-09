@@ -26,12 +26,12 @@ print "Test 1 passed: self-orthogonal and self-dual.";
 u := Vector(R, [1, 2]);
 v := Vector(R, [2, 0]);
 
-ip := MixZpInnerProduct(u, v, lengthSeq);
+ip := MixZpInnerProduct(C_mix, u, v);
 
 print "Mixed Inner Product:", ip;
 
 // Example fix for Test 2
-ip := MixZpInnerProduct(u, v, lengthSeq);
+ip := MixZpInnerProduct(C_mix, u, v);
 assert ip eq R!2;
 print "Test 2 passed: mixed inner product.";
 
@@ -90,7 +90,7 @@ print "Information rate:", InformationRate(C);
 // 2. Test inner product between random elements from the code
 u := Random(C);
 v := Random(C);
-mixed_prod := MixZpInnerProduct(u, v, lengthSeq);
+mixed_prod := MixZpInnerProduct(C, u, v);
 print "Mixed Inner Product of two random elements:", mixed_prod;
 
 // 3. Test Carlet Gray Map and its image structure

@@ -55,7 +55,7 @@ print "Information rate:", InformationRate(C);
 if #C ge 2 then
     u := Random(C);
     v := Random(C);
-    ip := MixZpInnerProduct(u, v, lengthSeq);
+    ip := MixZpInnerProduct(C, u, v);
     print "Sample inner product between two codewords:", ip;
 end if;
 

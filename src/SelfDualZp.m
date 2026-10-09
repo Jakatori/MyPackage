@@ -9,7 +9,7 @@ intrinsic IsSelfOrthogonal(C::MixZpCode) -> BoolElt
 
     for i in [1..k] do
         for j in [i..k] do
-            if MixZpInnerProduct(G[i], G[j], C`LengthSeq) ne 0 then
+            if MixZpInnerProduct(C, G[i], G[j]) ne 0 then
                 return false;
             end if;
         end for;
